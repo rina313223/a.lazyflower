@@ -1,10 +1,38 @@
 export const IG_POSTS = [
     {
+        region: '台中 Taichung',
+        permalink: 'https://www.instagram.com/p/DP3sQnGk9nj/',
+        date: '2025-10-16',
+        map: 'https://maps.app.goo.gl/E33NYDcaNkCwu9v8A',
+        content: `✨️#松之富複合式食堂
+
+🍽培根蛋炒飯／$80
+燒肉丼／$100
+味噌拉麵／$120
+
+🏡地址：台中市東勢區豐勢路127號
+🕑營業時間：11:00～14:00＆17:00～20:30
+☎️電話：04 2588 2816
+
+✏️假日到谷關走走 🌿
+回程經過東勢，隨手找了間小店
+店旁邊就有停車位
+大約可停5、6台車 🚗
+
+點了味噌拉麵
+湯頭濃郁但不死鹹，蠻順口的
+肉片是燒肉片，小小一片很可愛😋
+沒有筍乾，取而代之的是蔬菜、魚板、玉米粒
+整體是樸實好吃的台式風味～
+
+#懶懶花吃台中 #台中美食 #台中 #taichung #台灣美食 #台湾 #台湾グルメ #グルメ #台中東勢 #東勢美食 #taiwan #chinesefood #拉麵 #ramen #ラーメン`
+    } ,
+    {
             region: '台北 Taipei',
             permalink: 'https://www.instagram.com/p/DQEkQ0Uk2e_/',
             date: '2025-10-21',
             map: 'https://maps.app.goo.gl/NKsQwq9XZjt8GxM76',
-            content: `#三兄妹雪花冰
+            content: `✨️#三兄妹雪花冰
 
 🍽大三圓雪花冰／$160
 
@@ -25,16 +53,14 @@ FAN-CON上4人簡直不要太寵粉
 又被BTOB治癒了💘
 過現未愛💙
 
-#懶懶花吃台北 #懶懶花追星日常 #台北美食 #台北 #taipei #台灣美食 #台湾 #台湾グルメ #グルメ #台北冰品 #萬華美食 #西門町
-#西門町美食 #冰 #shavedice #かき氷 #かきごおり #踩點 #聖地巡礼 #BTOB #徐恩光 #李旼赫 #李昌燮 #任炫植 #Peniel #陸星材
-`
+#懶懶花吃台北 #懶懶花追星日常 #台北美食 #台北 #taipei #台灣美食 #台湾 #台湾グルメ #グルメ #台北冰品 #萬華美食 #西門町 #西門町美食 #冰 #shavedice #かき氷 #かきごおり #踩點 #聖地巡礼 #BTOB #徐恩光 #李旼赫 #李昌燮 #任炫植 #Peniel #陸星材`
         } ,
     {
             region: '台北 Taipei',
             permalink: 'https://www.instagram.com/p/DQJt2aEk67w/',
             date: '2025-10-23',
             map: 'https://maps.app.goo.gl/MLgTRz9xNYvY4F1n9',
-            content: `#小辣椒魷魚羹
+            content: `✨️#小辣椒魷魚羹
 
 🍽甜不辣／$70
 ➡️最後有菜單
@@ -81,7 +107,7 @@ FAN-CON上4人簡直不要太寵粉
             permalink: 'https://www.instagram.com/p/DQbvaGEEz-v/',
             date: '2025-10-30',
             map: 'https://maps.app.goo.gl/mmGhpXQmrgZ9UaKB6',
-            content: `#雞湯桑 #Torisan
+            content: `✨️#雞湯桑 #Torisan
 
 🍽東京雞白湯／$248
 升級套餐+蜂蜜溏心蛋+飲料／+$49
@@ -276,7 +302,7 @@ https://ocard.co/s/gate/m63jqx/PD9w5y
 🕑營業時間：11:00～22:00
 ☎️電話：04 2251 8677
 
-✏️一個人吃燒肉
+✏️一個人吃燒肉 
 爽度竟然這麼高❗️
 鄰近老虎城購物中心
 店內乾淨舒適，服務也很好👍🏻
