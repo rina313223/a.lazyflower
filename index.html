@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>清新美食部落格 | 區域食記彙整</title>
+    <!-- 引入 Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- 引入 Google Fonts - Inter for a clean look -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* 設置基本字體和背景 */
+        body {
+            font-family: 'Inter', 'Noto Sans TC', sans-serif;
+            background-color: #f7fafc; /* 淺灰底色 */
+        }
+        .post-card {
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .post-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+    </style>
+</head>
+<body class="text-gray-800">
+
+    <!-- 頂部導航與標題 -->
+    <header class="sticky top-0 bg-white shadow-md z-10">
+        <div class="max-w-7xl mx-auto p-4 flex flex-col sm:flex-row justify-between items-center space-y-4 sm:space-y-0">
+            <h1 class="text-3xl font-bold text-indigo-600 tracking-wider">
+                <span role="img" aria-label="flower">🌸</span> 懶人花食記
+            </h1>
+            
+            <!-- 搜尋欄 -->
+            <div class="w-full sm:w-80 relative">
+                <input 
+                    type="text" 
+                    id="search-input" 
+                    placeholder="🔍 搜尋城市、標題或關鍵字..." 
+                    class="w-full py-2 px-4 border border-gray-300 rounded-full shadow-inner focus:outline-none focus:ring-2 focus:ring-indigo-500 transition duration-150"
+                    oninput="filterPosts(this.value)"
+                >
+            </div>
+        </div>
+    </header>
+
+    <!-- 主要內容區塊 -->
+    <main class="max-w-7xl mx-auto p-4 sm:p-6 lg:p-8">
+        <h2 class="text-2xl font-semibold mb-6 text-gray-700">精選美食文章</h2>
+        
+        <!-- 文章容器，將由 JavaScript 渲染內容 -->
+        <div id="posts-container" class="space-y-10">
+            <!-- 這裡將載入所有城市分組和文章 -->
+        </div>
+
+        <!-- 搜尋結果空白提示 -->
+        <div id="no-results" class="text-center py-20 hidden">
+            <p class="text-xl text-gray-500">
+                抱歉！找不到符合 <span id="search-query-display" class="font-bold text-indigo-600"></span> 的食記。
+            </p>
+            <p class="mt-2 text-gray-400">請嘗試不同的關鍵字。</p>
+        </div>
+    </main>
+
+    <!-- 頁腳 -->
+    <footer class="bg-gray-100 mt-12 py-6 text-center text-sm text-gray-500">
+        <p>© 2024 懶人花食記。所有內容來自網路分享。</p>
+    </footer>
+
+    <script>
+        // 模擬 IG 貼文資料
+        // 您可以根據您的 IG 內容修改這些資料
+        const allPosts = [
+            { id: 1, city: '台北市', title: '東區爆漿抹茶鬆餅', caption: '抹茶控必訪！鬆餅外酥內軟，爆漿內餡茶味超濃郁，假日建議提早來。', imageUrl: 'https://placehold.co/400x400/31795A/ffffff?text=Taipei+Matcha', mapLink: 'https://maps.app.goo.gl/example1' },
+            { id: 2, city: '台中市', title: '文青老宅咖啡廳', caption: '隱藏在巷弄中的日式老宅，手沖咖啡香氣濃郁，氛圍滿分，是讀書工作的好地方。', imageUrl: 'https://placehold.co/400x400/964B00/ffffff?text=Taichung+Cafe', mapLink: 'https://maps.app.goo.gl/example2' },
+            { id: 3, city: '高雄市', title: '無敵海景義式餐廳', caption: '邊看夕陽邊用餐，超級浪漫！餐點選擇多樣，CP值很高，適合約會。', imageUrl: 'https://placehold.co/400x400/007bff/ffffff?text=Kaohsiung+Sea', mapLink: 'https://maps.app.goo.gl/example3' },
+            { id: 4, city: '台北市', title: '師大夜市隱藏版小吃', caption: '鹹甜交織的獨門醬汁，搭配酥脆的炸物，是每次逛夜市的結尾首選！', imageUrl: 'https://placehold.co/400x400/4c007a/ffffff?text=Taipei+Snack', mapLink: 'https://maps.app.goo.gl/example4' },
+            { id: 5, city: '台南市', title: '牛肉湯的清晨儀式', caption: '凌晨才吃得到的新鮮牛肉湯，湯頭鮮甜回甘，開啟台南美好一天的最佳方式。', imageUrl: 'https://placehold.co/400x400/ff6347/ffffff?text=Tainan+Soup', mapLink: 'https://maps.app.goo.gl/example5' },
+            { id: 6, city: '台中市', title: '審計新村創意冰品', caption: '夏天就是要吃冰！這家的造型冰淇淋超級可愛又消暑。', imageUrl: 'https://placehold.co/400x400/00bcd4/ffffff?text=Taichung+Ice', mapLink: 'https://maps.app.goo.gl/example6' },
+            // 您可以繼續添加更多貼文...
+        ];
+
+        const postsContainer = document.getElementById('posts-container');
+        const noResults = document.getElementById('no-results');
+        const searchQueryDisplay = document.getElementById('search-query-display');
+
+        /**
+         * 將貼文分組並渲染到頁面上
+         * @param {Array} postsToRender - 要渲染的貼文陣列
+         */
+        function renderPosts(postsToRender) {
+            postsContainer.innerHTML = ''; // 清空容器
+            
+            if (postsToRender.length === 0) {
+                noResults.classList.remove('hidden');
+                return;
+            } else {
+                noResults.classList.add('hidden');
+            }
+
+            // 1. 按城市分組
+            const groupedPosts = postsToRender.reduce((acc, post) => {
+                const city = post.city;
+                if (!acc[city]) {
+                    acc[city] = [];
+                }
+                acc[city].push(post);
+                return acc;
+            }, {});
+
+            // 2. 渲染每個城市區塊
+            for (const city in groupedPosts) {
+                const cityPosts = groupedPosts[city];
+
+                // 城市區塊標題
+                const citySection = document.createElement('div');
+                citySection.className = 'city-section border-b-4 border-indigo-200 pb-4 mb-8';
+                citySection.innerHTML = `
+                    <h3 class="text-3xl font-extrabold text-indigo-700 mb-6 flex items-center">
+                        <span class="mr-2">📍</span> ${city} 食記
+                    </h3>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                        <!-- 貼文卡片將在這裡插入 -->
+                    </div>
+                `;
+                
+                const gridContainer = citySection.querySelector('.grid');
+
+                // 3. 渲染城市內的貼文卡片
+                cityPosts.forEach(post => {
+                    const postElement = document.createElement('div');
+                    postElement.className = 'post-card bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-xl cursor-pointer';
+                    postElement.innerHTML = `
+                        <img 
+                            src="${post.imageUrl}" 
+                            alt="${post.title}" 
+                            class="w-full h-64 object-cover"
+                            onerror="this.onerror=null;this.src='https://placehold.co/400x400/9ca3af/ffffff?text=Image+Load+Error';"
+                        >
+                        <div class="p-5">
+                            <div class="flex justify-between items-start mb-2">
+                                <h4 class="text-xl font-bold text-gray-900">${post.title}</h4>
+                                <a href="${post.mapLink}" target="_blank" class="text-indigo-500 hover:text-indigo-700 transition duration-150 p-1 rounded-full bg-indigo-50 hover:bg-indigo-100 flex-shrink-0" title="開啟 Google 地圖">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.828 0l-4.243-4.243a8 8 0 1111.314 0z" />
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                                    </svg>
+                                </a>
+                            </div>
+                            <p class="text-gray-600 text-sm line-clamp-3">${post.caption}</p>
+                            <span class="inline-block mt-3 text-xs font-medium text-gray-400 bg-gray-100 px-3 py-1 rounded-full">${post.city}</span>
+                        </div>
+                    `;
+                    gridContainer.appendChild(postElement);
+                });
+
+                postsContainer.appendChild(citySection);
+            }
+        }
+
+        /**
+         * 根據搜尋關鍵字過濾貼文
+         * @param {string} query - 搜尋關鍵字
+         */
+        function filterPosts(query) {
+            const normalizedQuery = query.trim().toLowerCase();
+            searchQueryDisplay.textContent = query.trim();
+
+            if (normalizedQuery === '') {
+                renderPosts(allPosts); // 搜尋欄清空時，顯示所有文章
+                return;
+            }
+
+            // 過濾邏輯：檢查城市、標題或內文是否包含關鍵字
+            const filtered = allPosts.filter(post => 
+                post.city.toLowerCase().includes(normalizedQuery) ||
+                post.title.toLowerCase().includes(normalizedQuery) ||
+                post.caption.toLowerCase().includes(normalizedQuery)
+            );
+
+            renderPosts(filtered);
+        }
+
+        // 頁面載入時，先渲染所有文章
+        document.addEventListener('DOMContentLoaded', () => {
+            renderPosts(allPosts);
+        });
+    </script>
+
+</body>
+</html>
