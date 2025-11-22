@@ -82,6 +82,7 @@
     const cityNavList = document.getElementById('city-nav-list');
     const mobileNavList = document.getElementById('mobile-nav-list');
     let currentPostCounts = {};
+    let visiblePostsByRegion = {};
 
     function formatDate(dateStr){
         const date = new Date(dateStr);
@@ -112,6 +113,12 @@
         </div>`;
     }
 
+    function parseDate(dateStr) {
+        // 將 'YYYY-MM-DD' 解析成 Date 物件
+        const [year, month, day] = dateStr.split('-').map(Number);
+        return new Date(year, month-1, day);
+    }
+
     function renderPosts(regionsToRender, isSearch=false, filteredPosts=[]) {
         postsContainer.innerHTML = '';
         currentPostCounts = {};
@@ -120,7 +127,7 @@
             return;
         } else noResults.classList.add('hidden');
 
-        const sortedPosts = [...IG_POSTS].sort((a,b)=> new Date(b.date)-new Date(a.date));
+        const sortedPosts = [...IG_POSTS].sort((a,b) => parseDate(b.date) - parseDate(a.date));
         const groupedPosts = sortedPosts.reduce((acc, post)=>{
             if(!acc[post.region]) acc[post.region]=[];
             acc[post.region].push(post);
@@ -132,6 +139,8 @@
             const cityPosts = isSearch 
                 ? filteredPosts.filter(p => p.region === city) 
                 : groupedPosts[city] || [];
+
+            visiblePostsByRegion[city] = cityPosts; // <-- 儲存這個區域文章
 
             const safeCityId = city.replace(/\s+/g,'-');
             const initialCount = isSearch ? cityPosts.length : Math.min(cityPosts.length, POSTS_PER_LOAD);
@@ -169,20 +178,27 @@
     }
 
     window.loadMore = function(city){
-        const cityPosts = IG_POSTS.filter(p=>p.region===city);
+        const cityPosts = visiblePostsByRegion[city] || [];
         const currentCount = currentPostCounts[city]||0;
         const gridContainer = document.getElementById(`grid-${city.replace(/\s/g,'-')}`);
         const loadMoreButton = document.getElementById(`load-more-${city.replace(/\s/g,'-')}`);
         if(!gridContainer||!loadMoreButton) return;
-        const nextCount = Math.min(currentCount+POSTS_PER_LOAD,cityPosts.length);
-        for(let i=currentCount;i<nextCount;i++) gridContainer.insertAdjacentHTML('beforeend', createPostCard(cityPosts[i]));
-        currentPostCounts[city]=nextCount;
-        if(nextCount>=cityPosts.length){
+
+        const nextCount = Math.min(currentCount+POSTS_PER_LOAD, cityPosts.length);
+        for(let i=currentCount; i<nextCount; i++){
+            gridContainer.insertAdjacentHTML('beforeend', createPostCard(cityPosts[i]));
+        }
+        currentPostCounts[city] = nextCount;
+
+        if(nextCount >= cityPosts.length){
             loadMoreButton.textContent=`已顯示全部 ${cityPosts.length} 篇貼文`;
-            loadMoreButton.disabled=true;
+            loadMoreButton.disabled = true;
             loadMoreButton.classList.add('bg-gray-300','cursor-not-allowed');
             loadMoreButton.classList.remove('bg-blue','hover:bg-blue');
-        } else loadMoreButton.textContent=`載入更多 (目前已顯示 ${nextCount}/${cityPosts.length} 篇)`;
+        } else {
+            loadMoreButton.textContent=`載入更多 (目前已顯示 ${nextCount}/${cityPosts.length} 篇)`;
+        }
+
         if(window.instgrm) window.instgrm.Embeds.process();
     }
 
