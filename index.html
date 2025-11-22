@@ -3,164 +3,486 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>清新美食部落格 | 區域食記彙整</title>
+    <title>a.lazyflower 一朵懶懶花🌸</title>
     <!-- 引入 Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- 引入 Google Fonts - Inter for a clean look -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- 引入 Google Fonts - Noto Sans TC for better Chinese display and Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Noto+Sans+TC:wght@400;700&display=swap" rel="stylesheet">
+    
+    <!-- 引入 Instagram 嵌入腳本 (Async/非同步載入) -->
+    <script async src="//www.instagram.com/embed.js"></script>
+    
     <style>
-        /* 設置基本字體和背景 */
+        /* 設置基本字體和背景，使用 Noto Sans TC 優先 */
         body {
-            font-family: 'Inter', 'Noto Sans TC', sans-serif;
-            background-color: #f7fafc; /* 淺灰底色 */
+            font-family: 'Noto Sans TC', 'Inter', sans-serif;
+            background-color: #fcfcfc; /* 接近純白的背景 */
         }
+        .text-pink{
+            color: #ffa4d1;
+        }
+        .bg-blue{
+            background-color: #32a9df;
+        }
+        .bg-blue:hover{
+            background-color: rgb(27, 128, 175);
+        }
+        /* 針對貼文卡片設計更豐富的陰影與互動效果 */
         .post-card {
-            transition: transform 0.2s, box-shadow 0.2s;
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+            background-color: #ffffff;
+            border: 1px solid #f0f0f0;
         }
         .post-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            transform: translateY(-5px) rotate(0.5deg); /* 輕微上浮和旋轉增加趣味性 */
+            /* 使用粉色調的陰影 */
+            box-shadow: 0 15px 25px -5px rgba(236, 72, 153, 0.2); 
+        }
+        /* 側邊導航欄固定 */
+        #sidebar {
+            width: 16rem; /* 256px */
+            transition: transform 0.3s ease-in-out;
+            max-height: calc(100vh - 8rem); /* 讓側邊欄可捲動 */
+        }
+        /* 捲軸美化 (僅針對支援的瀏覽器) */
+        #sidebar::-webkit-scrollbar {
+            width: 6px;
+        }
+        #sidebar::-webkit-scrollbar-thumb {
+            background-color: #f9a8d4; /* 淺粉色捲軸 */
+            border-radius: 3px;
+        }
+        /* IG 嵌入貼文容器樣式 */
+        .ig-embed-container {
+            width: 100%;
+            min-width: 0;
+            overflow: hidden;
+        }
+        .ig-embed-container .instagram-media {
+            width: 100% !important;
+            max-width: 100% !important;
+            min-width: 0 !important;
+            margin: 0 !important;
+            padding: 0 !important;
         }
     </style>
 </head>
-<body class="text-gray-800">
+<body class="text-slate-800">
 
-    <!-- 頂部導航與標題 -->
-    <header class="sticky top-0 bg-white shadow-md z-10">
+    <!-- 頂部導航與標題 (Sticky Header) -->
+    <header class="sticky top-0 bg-white shadow-xl z-20">
         <div class="max-w-7xl mx-auto p-4 flex flex-col sm:flex-row justify-between items-center space-y-4 sm:space-y-0">
-            <h1 class="text-3xl font-bold text-indigo-600 tracking-wider">
-                <span role="img" aria-label="flower">🌸</span> 懶人花食記
+            <!-- 粉色主題標題 -->
+            <h1 class="text-xl font-extrabold text-pink flex items-center">
+                a.lazyflower<br>一朵懶懶花🌸 台中｜美食｜生活
             </h1>
             
-            <!-- 搜尋欄 -->
-            <div class="w-full sm:w-80 relative">
+            <!-- 搜尋欄 (使用藍色邊框輔助) -->
+            <div class="w-full sm:w-96 relative">
                 <input 
                     type="text" 
                     id="search-input" 
-                    placeholder="🔍 搜尋城市、標題或關鍵字..." 
-                    class="w-full py-2 px-4 border border-gray-300 rounded-full shadow-inner focus:outline-none focus:ring-2 focus:ring-indigo-500 transition duration-150"
+                    placeholder="🔍 搜尋區域、店名或關鍵字..." 
+                    class="w-full py-2.5 pl-5 pr-10 border-2 border-blue-300 rounded-full shadow-md focus:outline-none focus:ring-4 focus:ring-blue-100 transition duration-200"
                     oninput="filterPosts(this.value)"
                 >
             </div>
         </div>
     </header>
 
-    <!-- 主要內容區塊 -->
-    <main class="max-w-7xl mx-auto p-4 sm:p-6 lg:p-8">
-        <h2 class="text-2xl font-semibold mb-6 text-gray-700">精選美食文章</h2>
+    <!-- 主要佈局：側邊欄 + 內容 -->
+    <div class="max-w-7xl mx-auto flex">
         
-        <!-- 文章容器，將由 JavaScript 渲染內容 -->
-        <div id="posts-container" class="space-y-10">
-            <!-- 這裡將載入所有城市分組和文章 -->
-        </div>
+        <!-- 側邊區域導航欄 (Sticky Sidebar) -->
+        <nav id="sidebar" class="hidden lg:block sticky top-32 py-8 pr-6 border-r border-slate-100 overflow-y-auto">
+            <!-- 導航標題使用藍色 -->
+            <h3 class="text-lg font-bold mb-4 text-blue-500 border-b pb-2 border-blue-100">分類導航</h3>
+            <ul id="city-nav-list" class="space-y-2">
+                <!-- 區域列表將由 JS 渲染 -->
+            </ul>
+        </nav>
 
-        <!-- 搜尋結果空白提示 -->
-        <div id="no-results" class="text-center py-20 hidden">
-            <p class="text-xl text-gray-500">
-                抱歉！找不到符合 <span id="search-query-display" class="font-bold text-indigo-600"></span> 的食記。
-            </p>
-            <p class="mt-2 text-gray-400">請嘗試不同的關鍵字。</p>
-        </div>
-    </main>
+        <!-- 主要文章內容區塊 -->
+        <main class="flex-1 p-4 sm:p-6 lg:p-10">
+            <!-- 文章容器，將由 JavaScript 渲染內容 -->
+            <div id="posts-container" class="space-y-16">
+                <!-- 這裡將載入所有城市分組和文章 -->
+            </div>
+
+            <!-- 搜尋結果空白提示 -->
+            <div id="no-results" class="text-center py-20 hidden bg-slate-50 rounded-xl mt-10">
+                <p class="text-2xl font-semibold text-slate-500 mb-2">
+                    😅 找不到結果
+                </p>
+                <p class="text-lg text-slate-400">
+                    抱歉！找不到符合 <span id="search-query-display" class="font-bold text-pink"></span> 的食記。
+                </p>
+                <p class="mt-4 text-slate-400">請嘗試更寬泛的關鍵字或檢查拼寫。</p>
+            </div>
+        </main>
+    </div>
 
     <!-- 頁腳 -->
-    <footer class="bg-gray-100 mt-12 py-6 text-center text-sm text-gray-500">
-        <p>© 2024 懶人花食記。所有內容來自網路分享。</p>
+    <footer class="bg-slate-100 mt-12 py-8 text-center text-sm text-slate-500">
+        <p>Copyright © 2025 a.lazyflower 一朵懶懶花🌸. All rights reserved.</p>
     </footer>
 
     <script>
-        // 模擬 IG 貼文資料
-        // 您可以根據您的 IG 內容修改這些資料
-        const allPosts = [
-            { id: 1, city: '台北市', title: '東區爆漿抹茶鬆餅', caption: '抹茶控必訪！鬆餅外酥內軟，爆漿內餡茶味超濃郁，假日建議提早來。', imageUrl: 'https://placehold.co/400x400/31795A/ffffff?text=Taipei+Matcha', mapLink: 'https://maps.app.goo.gl/example1' },
-            { id: 2, city: '台中市', title: '文青老宅咖啡廳', caption: '隱藏在巷弄中的日式老宅，手沖咖啡香氣濃郁，氛圍滿分，是讀書工作的好地方。', imageUrl: 'https://placehold.co/400x400/964B00/ffffff?text=Taichung+Cafe', mapLink: 'https://maps.app.goo.gl/example2' },
-            { id: 3, city: '高雄市', title: '無敵海景義式餐廳', caption: '邊看夕陽邊用餐，超級浪漫！餐點選擇多樣，CP值很高，適合約會。', imageUrl: 'https://placehold.co/400x400/007bff/ffffff?text=Kaohsiung+Sea', mapLink: 'https://maps.app.goo.gl/example3' },
-            { id: 4, city: '台北市', title: '師大夜市隱藏版小吃', caption: '鹹甜交織的獨門醬汁，搭配酥脆的炸物，是每次逛夜市的結尾首選！', imageUrl: 'https://placehold.co/400x400/4c007a/ffffff?text=Taipei+Snack', mapLink: 'https://maps.app.goo.gl/example4' },
-            { id: 5, city: '台南市', title: '牛肉湯的清晨儀式', caption: '凌晨才吃得到的新鮮牛肉湯，湯頭鮮甜回甘，開啟台南美好一天的最佳方式。', imageUrl: 'https://placehold.co/400x400/ff6347/ffffff?text=Tainan+Soup', mapLink: 'https://maps.app.goo.gl/example5' },
-            { id: 6, city: '台中市', title: '審計新村創意冰品', caption: '夏天就是要吃冰！這家的造型冰淇淋超級可愛又消暑。', imageUrl: 'https://placehold.co/400x400/00bcd4/ffffff?text=Taichung+Ice', mapLink: 'https://maps.app.goo.gl/example6' },
-            // 您可以繼續添加更多貼文...
+        const POSTS_PER_LOAD = 6; // 初始或每次載入的文章數量
+        
+        // 全台各縣市名稱+英文，以及特殊分類
+        const REGIONS = [
+            '台北 Taipei', '新北 New Taipei', '桃園 Taoyuan', 
+            '苗栗 Miaoli','台中 Taichung', '彰化 Changhua',
+            '南投 Nantou', '雲林 Yunlin', '嘉義 Chiayi', 
+            '台南 Tainan', '高雄 Kaohsiung','屏東 Pingtung', '宜蘭 Yilan', '花蓮 Hualien', 
+            '台東 Taitung', '日本 Japan', '開箱 Unboxing', '旅遊 Travel'
+        ];
+
+        /**
+         * IG 貼文資料集
+         * 格式說明：
+         * - region: 所屬區域（必須對應 REGIONS 中的值）
+         * - permalink: IG 貼文的完整 URL（例如：https://www.instagram.com/reel/DII3CyjzZ4z/）
+         * - date: 發文日期（格式：'YYYY-MM-DD'，例如：'2025-01-15'）
+         * - content: 貼文內容（用於搜尋和顯示）
+         * - map: 地圖連結（選填，例如：Google Maps URL，如果不為空則會顯示地圖按鈕）
+         * 
+         * 新增貼文時，只需在此陣列中添加新物件即可
+         * 貼文會自動依照日期新到舊排序
+         */
+        const IG_POSTS = [
+            {
+                region: '台中 Taichung',
+                permalink: 'https://www.instagram.com/reel/DII3CyjzZ4z/',
+                date: '2025-04-07',
+                map: 'https://maps.app.goo.gl/9mzVJmZKHpGjL77g8',
+                content: `✨️#IKIGAI燒肉專門店
+
+🍽美國CH翼板／$440
+美國翼板＆牛舌雙拼／$490
+10%服務費另收
+
+🏡地址：台中市西屯區朝富路100號2樓
+🕑營業時間：11:00～22:00
+☎️電話：04 2251 8677
+
+✏️一個人吃燒肉
+爽度竟然這麼高❗️
+鄰近老虎城購物中心
+店內乾淨舒適，服務也很好👍🏻
+白飯、味噌湯可以無限續
+不過我光吃完整份套餐就好撐了😂
+美國翼板＆牛舌雙拼
+肉蠻新鮮的🥩🥓
+味噌湯裡還發現蛤蜊*1
+美味又實惠的燒肉
+分享給大家～
+
+#懶懶花吃台中 #台中美食 #台中 #taichung #台灣美食 #台湾 #グルメ #台湾グルメ #台中景點 #台中西屯 #西屯美食 #老虎城 #秋紅谷 #taiwan #燒肉 #yakiniku #焼肉 #台中燒肉`
+            },
+            {
+                region: '台北 Taipei',
+                permalink: 'https://www.instagram.com/reel/DI-5Yj7T21O/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==',
+                date: '2025-01-18',
+                content: '台北咖啡廳推薦，享受午後美好時光'
+            },
+            {
+                region: '日本 Japan',
+                permalink: 'https://www.instagram.com/p/DRR0BYYEw5G/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==',
+                date: '2025-01-15',
+                content: '日本旅遊分享，美麗的風景和美食'
+            }
         ];
 
         const postsContainer = document.getElementById('posts-container');
         const noResults = document.getElementById('no-results');
         const searchQueryDisplay = document.getElementById('search-query-display');
+        const cityNavList = document.getElementById('city-nav-list');
+        
+        // 用來追蹤每個區域目前顯示了多少貼文
+        let currentPostCounts = {};
 
         /**
-         * 將貼文分組並渲染到頁面上
-         * @param {Array} postsToRender - 要渲染的貼文陣列
+         * 格式化日期顯示
+         * @param {string} dateStr - 日期字串 (格式：'YYYY-MM-DD')
+         * @returns {string} 格式化後的日期字串
          */
-        function renderPosts(postsToRender) {
-            postsContainer.innerHTML = ''; // 清空容器
+        function formatDate(dateStr) {
+            const date = new Date(dateStr);
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const day = String(date.getDate()).padStart(2, '0');
+            return `${year}年${month}月${day}日`;
+        }
+
+        /**
+         * 生成 IG 嵌入貼文的 HTML
+         * @param {Object} post - 貼文資料物件 { region, permalink, date, content }
+         * @returns {string} HTML 字串
+         */
+        function createPostCard(post) {
+            // 清理 permalink，移除所有查詢參數，只保留乾淨的 URL
+            // Instagram embed.js 需要乾淨的 permalink 才能正確識別貼文
+            let cleanPermalink = post.permalink.trim();
             
-            if (postsToRender.length === 0) {
+            // 移除 URL 中的查詢參數（? 之後的所有內容）
+            if (cleanPermalink.includes('?')) {
+                cleanPermalink = cleanPermalink.split('?')[0];
+            }
+            
+            // 移除 URL 中的錨點（# 之後的所有內容）
+            if (cleanPermalink.includes('#')) {
+                cleanPermalink = cleanPermalink.split('#')[0];
+            }
+            
+            // 確保 URL 以斜線結尾（Instagram 的標準格式）
+            if (!cleanPermalink.endsWith('/')) {
+                cleanPermalink += '/';
+            }
+            
+            // 確保 URL 格式正確（必須包含 instagram.com）
+            if (!cleanPermalink.includes('instagram.com')) {
+                console.error('Invalid Instagram permalink:', post.permalink);
+            }
+            
+            return `
+                <div class="post-card rounded-xl shadow-md bg-white overflow-hidden">
+                    <!-- IG 嵌入貼文容器 -->
+                    <div class="w-full ig-embed-container">
+                        <blockquote class="instagram-media" data-instgrm-permalink="${cleanPermalink}" data-instgrm-version="14"></blockquote>
+                    </div>
+                    
+                    <!-- 手動添加 IG 連結按鈕，確保點擊時打開正確的貼文 -->
+                    <div class="px-4 pb-2">
+                        <a href="${cleanPermalink}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 text-xs text-slate-500 hover:text-blue-600 transition duration-150">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+                            </svg>
+                            在 Instagram 查看這則貼文
+                        </a>
+                    </div>
+                    
+                    <!-- 貼文資訊 -->
+                    <div class="p-4">
+                        <!-- 貼文內容 -->
+                        <p class="text-slate-700 text-sm mb-3 leading-relaxed">${post.content}</p>
+                        
+                        <!-- 地圖按鈕（如果有地圖連結） -->
+                        ${post.map ? `
+                        <div class="mb-3">
+                            <a href="${post.map}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 text-sm font-medium text-blue-600 hover:text-blue-700 transition duration-150">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.828 0l-4.243-4.243a8 8 0 1111.314 0z" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                                </svg>
+                                開啟地圖
+                            </a>
+                        </div>
+                        ` : ''}
+                        
+                        <!-- 底部資訊：日期和區域標籤 -->
+                        <div class="flex justify-between items-center">
+                            <span class="text-xs text-slate-500">${formatDate(post.date)}</span>
+                            <span class="inline-block text-xs font-semibold text-white bg-blue-600 px-3 py-1 rounded-full">${post.region}</span>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        /**
+         * 修正 Instagram embed 中的連結，確保指向正確的 permalink
+         */
+        function fixInstagramLinks() {
+            // 找到所有 Instagram embed 的 blockquote
+            const instagramEmbeds = document.querySelectorAll('blockquote.instagram-media');
+            
+            instagramEmbeds.forEach(blockquote => {
+                const permalink = blockquote.getAttribute('data-instgrm-permalink');
+                if (!permalink) return;
+                
+                // 清理 permalink
+                let cleanPermalink = permalink.trim();
+                if (cleanPermalink.includes('?')) {
+                    cleanPermalink = cleanPermalink.split('?')[0];
+                }
+                if (cleanPermalink.includes('#')) {
+                    cleanPermalink = cleanPermalink.split('#')[0];
+                }
+                if (!cleanPermalink.endsWith('/')) {
+                    cleanPermalink += '/';
+                }
+                
+                // 更新 blockquote 中的 permalink
+                blockquote.setAttribute('data-instgrm-permalink', cleanPermalink);
+                
+                // 找到 blockquote 內的所有連結並更新
+                const links = blockquote.querySelectorAll('a[href*="instagram.com"]');
+                links.forEach(link => {
+                    // 只更新指向 Instagram 的連結
+                    if (link.href.includes('instagram.com')) {
+                        link.href = cleanPermalink;
+                        link.setAttribute('target', '_blank');
+                        link.setAttribute('rel', 'noopener noreferrer');
+                    }
+                });
+            });
+        }
+
+        /**
+         * 渲染指定區域的 IG 貼文
+         * @param {Array} posts - 要渲染的貼文陣列
+         * @param {HTMLElement} gridContainer - 貼文網格容器
+         * @param {number} start - 開始索引
+         * @param {number} count - 要渲染的數量
+         */
+        function appendPosts(posts, gridContainer, start, count) {
+            const end = Math.min(start + count, posts.length);
+            for (let i = start; i < end; i++) {
+                gridContainer.insertAdjacentHTML('beforeend', createPostCard(posts[i]));
+            }
+            // 觸發 Instagram embed.js 重新處理嵌入內容
+            if (window.instgrm) {
+                window.instgrm.Embeds.process();
+                // 等待 embed.js 處理完成後，修正連結
+                setTimeout(() => {
+                    fixInstagramLinks();
+                }, 500);
+            }
+        }
+
+        /**
+         * 處理點擊「載入更多」按鈕的邏輯
+         * @param {string} city - 城市名稱
+         */
+        window.loadMore = function(city) {
+            // 取得該區域的所有貼文
+            const cityPosts = IG_POSTS.filter(post => post.region === city);
+            const currentCount = currentPostCounts[city] || 0;
+            const gridContainer = document.getElementById(`grid-${city.replace(/\s/g, '-')}`);
+            const loadMoreButton = document.getElementById(`load-more-${city.replace(/\s/g, '-')}`);
+
+            if (!gridContainer || !loadMoreButton) return;
+
+            // 添加更多 IG 貼文
+            appendPosts(cityPosts, gridContainer, currentCount, POSTS_PER_LOAD);
+            currentPostCounts[city] = Math.min(currentCount + POSTS_PER_LOAD, cityPosts.length);
+
+            // 更新按鈕文字
+            const total = cityPosts.length;
+            const current = currentPostCounts[city];
+            loadMoreButton.textContent = `載入更多 (目前已顯示 ${current} / ${total} 篇)`;
+
+            // 檢查是否還有更多貼文可以載入
+            if (current >= total) {
+                loadMoreButton.textContent = `已顯示全部 ${total} 篇貼文`;
+                loadMoreButton.disabled = true;
+                loadMoreButton.classList.remove('bg-blue', 'hover:bg-blue');
+                loadMoreButton.classList.add('bg-gray-300', 'cursor-not-allowed');
+            }
+        };
+
+        /**
+         * 將貼文分組並渲染到頁面上 (或根據搜尋結果渲染)
+         * @param {Array} regionsToRender - 要渲染的區域陣列 (來自 REGIONS 或 filterPosts)
+         * @param {boolean} isSearchMode - 是否處於搜尋模式
+         */
+        function renderPosts(regionsToRender, isSearchMode = false) {
+            postsContainer.innerHTML = ''; // 清空容器
+            currentPostCounts = {}; // 重置計數
+
+            if (regionsToRender.length === 0 && document.getElementById('search-input').value.trim() !== '') {
                 noResults.classList.remove('hidden');
+                cityNavList.innerHTML = ''; // 搜尋無果，清空側邊欄
                 return;
             } else {
                 noResults.classList.add('hidden');
             }
 
-            // 1. 按城市分組
-            const groupedPosts = postsToRender.reduce((acc, post) => {
-                const city = post.city;
-                if (!acc[city]) {
-                    acc[city] = [];
+            // 按區域分組貼文，並按日期新到舊排序
+            const sortedPosts = [...IG_POSTS].sort((a, b) => {
+                // 按日期新到舊排序
+                return new Date(b.date) - new Date(a.date);
+            });
+            
+            const groupedPosts = sortedPosts.reduce((acc, post) => {
+                const region = post.region;
+                if (!acc[region]) {
+                    acc[region] = [];
                 }
-                acc[city].push(post);
+                acc[region].push(post);
                 return acc;
             }, {});
 
-            // 2. 渲染每個城市區塊
-            for (const city in groupedPosts) {
-                const cityPosts = groupedPosts[city];
+            // 清空並重新渲染側邊導航
+            cityNavList.innerHTML = '';
 
-                // 城市區塊標題
-                const citySection = document.createElement('div');
-                citySection.className = 'city-section border-b-4 border-indigo-200 pb-4 mb-8';
+            // 渲染每個區域區塊
+            regionsToRender.forEach(city => {
+                const cityPosts = groupedPosts[city] || [];
+
+                // 轉換為安全的錨點 ID：將空格替換為連字符
+                const safeCityId = city.replace(/\s+/g, '-'); // 轉換為錨點 ID
+                const initialCount = isSearchMode ? cityPosts.length : Math.min(cityPosts.length, POSTS_PER_LOAD);
+                const hasMore = cityPosts.length > initialCount;
+
+                // 渲染側邊導航項目
+                const navItem = document.createElement('li');
+                navItem.innerHTML = `<a href="#${safeCityId}" class="block text-slate-600 hover:text-pink font-medium transition duration-150 p-1 rounded-lg">${city} ${cityPosts.length > 0 ? `(${cityPosts.length})` : ''}</a>`;
+                cityNavList.appendChild(navItem);
+
+                // 渲染區域區塊
+                const citySection = document.createElement('section');
+                citySection.id = safeCityId;
+                citySection.className = 'city-section pt-10'; // 增加 pt-10 讓錨點不會被導航欄遮住
                 citySection.innerHTML = `
-                    <h3 class="text-3xl font-extrabold text-indigo-700 mb-6 flex items-center">
-                        <span class="mr-2">📍</span> ${city} 食記
+                    <!-- 區域標題使用粉色主題 -->
+                    <h3 class="text-3xl font-extrabold text-pink mb-6 flex items-center border-b-2 border-pink pb-2">
+                        <span class="mr-3 text-3xl">🌸</span> ${city} <span class="text-lg font-normal text-slate-500 ml-3">${cityPosts.length > 0 ? `(${cityPosts.length} 篇)` : '(尚無貼文)'}</span>
                     </h3>
-                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <!-- 貼文網格容器 -->
+                    <div id="grid-${safeCityId}" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-6">
                         <!-- 貼文卡片將在這裡插入 -->
+                    </div>
+                    <!-- 載入更多按鈕 -->
+                    <div class="text-center mt-8">
+                        ${cityPosts.length > 0 ? `
+                        <button 
+                            id="load-more-${safeCityId}" 
+                            onclick="loadMore('${city}')" 
+                            class="font-bold py-3 px-8 rounded-full shadow-lg transition duration-300 
+                                ${!hasMore ? 'bg-gray-300 cursor-not-allowed' : 'bg-blue hover:bg-blue text-white'}"
+                            ${!hasMore ? 'disabled' : ''}
+                        >
+                            ${hasMore ? `載入更多 (目前已顯示 ${initialCount} / ${cityPosts.length} 篇)` : `已顯示全部 ${cityPosts.length} 篇貼文`}
+                        </button>
+                        ` : ''}
                     </div>
                 `;
                 
                 const gridContainer = citySection.querySelector('.grid');
-
-                // 3. 渲染城市內的貼文卡片
-                cityPosts.forEach(post => {
-                    const postElement = document.createElement('div');
-                    postElement.className = 'post-card bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-xl cursor-pointer';
-                    postElement.innerHTML = `
-                        <img 
-                            src="${post.imageUrl}" 
-                            alt="${post.title}" 
-                            class="w-full h-64 object-cover"
-                            onerror="this.onerror=null;this.src='https://placehold.co/400x400/9ca3af/ffffff?text=Image+Load+Error';"
-                        >
-                        <div class="p-5">
-                            <div class="flex justify-between items-start mb-2">
-                                <h4 class="text-xl font-bold text-gray-900">${post.title}</h4>
-                                <a href="${post.mapLink}" target="_blank" class="text-indigo-500 hover:text-indigo-700 transition duration-150 p-1 rounded-full bg-indigo-50 hover:bg-indigo-100 flex-shrink-0" title="開啟 Google 地圖">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.828 0l-4.243-4.243a8 8 0 1111.314 0z" />
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                                    </svg>
-                                </a>
-                            </div>
-                            <p class="text-gray-600 text-sm line-clamp-3">${post.caption}</p>
-                            <span class="inline-block mt-3 text-xs font-medium text-gray-400 bg-gray-100 px-3 py-1 rounded-full">${post.city}</span>
-                        </div>
-                    `;
-                    gridContainer.appendChild(postElement);
-                });
+                // 渲染初始 IG 貼文
+                if (cityPosts.length > 0) {
+                    appendPosts(cityPosts, gridContainer, 0, initialCount);
+                    currentPostCounts[city] = initialCount;
+                }
 
                 postsContainer.appendChild(citySection);
+            });
+
+            // 觸發 Instagram embed.js 處理嵌入內容
+            if (window.instgrm) {
+                window.instgrm.Embeds.process();
+                // 等待 embed.js 處理完成後，修正連結
+                setTimeout(() => {
+                    fixInstagramLinks();
+                }, 500);
             }
         }
 
         /**
-         * 根據搜尋關鍵字過濾貼文
+         * 根據搜尋關鍵字過濾區域和貼文
          * @param {string} query - 搜尋關鍵字
          */
         function filterPosts(query) {
@@ -168,23 +490,125 @@
             searchQueryDisplay.textContent = query.trim();
 
             if (normalizedQuery === '') {
-                renderPosts(allPosts); // 搜尋欄清空時，顯示所有文章
+                renderPosts(REGIONS); // 搜尋欄清空時，顯示所有區域
                 return;
             }
 
-            // 過濾邏輯：檢查城市、標題或內文是否包含關鍵字
-            const filtered = allPosts.filter(post => 
-                post.city.toLowerCase().includes(normalizedQuery) ||
-                post.title.toLowerCase().includes(normalizedQuery) ||
-                post.caption.toLowerCase().includes(normalizedQuery)
-            );
+            // 過濾邏輯：檢查區域名稱或貼文內容是否包含關鍵字
+            const matchingRegions = new Set();
+            
+            // 檢查區域名稱
+            REGIONS.forEach(region => {
+                if (region.toLowerCase().includes(normalizedQuery)) {
+                    matchingRegions.add(region);
+                }
+            });
+            
+            // 檢查貼文內容和區域
+            IG_POSTS.forEach(post => {
+                if (post.region.toLowerCase().includes(normalizedQuery) ||
+                    (post.content && post.content.toLowerCase().includes(normalizedQuery))) {
+                    matchingRegions.add(post.region);
+                }
+            });
 
-            renderPosts(filtered);
+            const filtered = Array.from(matchingRegions);
+
+            // 搜尋模式下，一次性顯示所有符合條件的結果
+            renderPosts(filtered, true); 
         }
 
-        // 頁面載入時，先渲染所有文章
+        // 頁面載入時，先渲染所有區域
         document.addEventListener('DOMContentLoaded', () => {
-            renderPosts(allPosts);
+            renderPosts(REGIONS);
+            
+            // 監聽 Instagram embed.js 的載入
+            if (window.instgrm) {
+                // 如果已經載入，立即修正連結
+                setTimeout(() => {
+                    fixInstagramLinks();
+                }, 1000);
+            } else {
+                // 如果還沒載入，監聽載入事件
+                window.addEventListener('load', () => {
+                    setTimeout(() => {
+                        fixInstagramLinks();
+                    }, 1000);
+                });
+            }
+            
+            // 使用 MutationObserver 監聽新的 Instagram embed 被添加
+            const observer = new MutationObserver((mutations) => {
+                let shouldFix = false;
+                mutations.forEach((mutation) => {
+                    mutation.addedNodes.forEach((node) => {
+                        if (node.nodeType === 1) { // Element node
+                            if (node.classList && node.classList.contains('instagram-media')) {
+                                shouldFix = true;
+                            } else if (node.querySelector && node.querySelector('.instagram-media')) {
+                                shouldFix = true;
+                            }
+                        }
+                    });
+                });
+                if (shouldFix) {
+                    setTimeout(() => {
+                        fixInstagramLinks();
+                    }, 500);
+                }
+            });
+            
+            // 開始觀察整個文檔的變化
+            observer.observe(document.body, {
+                childList: true,
+                subtree: true
+            });
+
+            // 處理側邊欄點擊平滑捲動
+            let isScrolling = false; // 防止重複點擊造成多次捲動
+            
+            cityNavList.addEventListener('click', function(e) {
+                // 找到被點擊的 <a> 標籤（可能是點擊到 <a> 內的文字）
+                const linkElement = e.target.closest('a');
+                if (!linkElement) return;
+                
+                e.preventDefault();
+                e.stopPropagation();
+                
+                // 如果正在捲動，忽略新的點擊
+                if (isScrolling) {
+                    return;
+                }
+                
+                const href = linkElement.getAttribute('href');
+                if (!href || !href.startsWith('#')) return;
+                
+                const targetId = href.substring(1);
+                const targetElement = document.getElementById(targetId);
+                
+                if (!targetElement) {
+                    console.warn('找不到目標元素:', targetId);
+                    return;
+                }
+                
+                isScrolling = true;
+                
+                // 計算目標位置（考慮 sticky header 的高度）
+                const headerOffset = 120; // sticky header 的預估高度
+                const elementPosition = targetElement.getBoundingClientRect().top;
+                const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+                
+                // 使用 window.scrollTo 進行平滑捲動
+                window.scrollTo({
+                    top: Math.max(0, offsetPosition), // 確保不會捲動到負數位置
+                    behavior: 'smooth'
+                });
+                
+                // 捲動完成後重置標記
+                setTimeout(() => {
+                    isScrolling = false;
+                }, 1000); // 增加時間以確保捲動完成
+            });
         });
     </script>
 
