@@ -84,15 +84,7 @@ def extract_instagram_post(url):
                 break
         # content
         content = ''
-        meta = soup.find('meta', property='og:description')
-        if meta:
-            full_content = meta.get('content','')
-            # 從 ✨️ 後面開始提取
-            split_content = re.split(r'✨️', full_content)
-            content = split_content[1].strip() if len(split_content) > 1 else full_content.strip()
-            # 去掉最後的雙引號（如果有）
-            if content.endswith('.\".'):
-                content = content[:-1].strip()
+        
         return {'date':date_str, 'content':content}
     except:
         return None
