@@ -88,6 +88,18 @@
                 >
             </div>
         </div>
+        
+        <!-- 手機版分類導覽 (水平滾動) -->
+        <div class="lg:hidden border-t border-slate-200 bg-white">
+            <div class="max-w-7xl mx-auto px-4 py-3">
+                <h3 class="text-sm font-bold mb-2 text-blue-500">分類導覽</h3>
+                <div class="overflow-x-auto">
+                    <ul id="mobile-nav-list" class="flex space-x-3 pb-2">
+                        <!-- 區域列表將由 JS 渲染 -->
+                    </ul>
+                </div>
+            </div>
+        </div>
     </header>
 
     <!-- 主要佈局：側邊欄 + 內容 -->
@@ -96,7 +108,7 @@
         <!-- 側邊區域導航欄 (Sticky Sidebar) -->
         <nav id="sidebar" class="hidden lg:block sticky top-32 py-8 pr-6 border-r border-slate-100 overflow-y-auto">
             <!-- 導航標題使用藍色 -->
-            <h3 class="text-lg font-bold mb-4 text-blue-500 border-b pb-2 border-blue-100">分類導航</h3>
+            <h3 class="text-lg font-bold mb-4 text-blue-500 border-b pb-2 border-blue-100">分類導覽</h3>
             <ul id="city-nav-list" class="space-y-2">
                 <!-- 區域列表將由 JS 渲染 -->
             </ul>
@@ -199,6 +211,7 @@
         const noResults = document.getElementById('no-results');
         const searchQueryDisplay = document.getElementById('search-query-display');
         const cityNavList = document.getElementById('city-nav-list');
+        const mobileNavList = document.getElementById('mobile-nav-list');
         
         // 用來追蹤每個區域目前顯示了多少貼文
         let currentPostCounts = {};
@@ -395,6 +408,9 @@
             if (regionsToRender.length === 0 && document.getElementById('search-input').value.trim() !== '') {
                 noResults.classList.remove('hidden');
                 cityNavList.innerHTML = ''; // 搜尋無果，清空側邊欄
+                if (mobileNavList) {
+                    mobileNavList.innerHTML = ''; // 搜尋無果，清空手機版導航
+                }
                 return;
             } else {
                 noResults.classList.add('hidden');
@@ -415,8 +431,11 @@
                 return acc;
             }, {});
 
-            // 清空並重新渲染側邊導航
+            // 清空並重新渲染側邊導航（桌面版和手機版）
             cityNavList.innerHTML = '';
+            if (mobileNavList) {
+                mobileNavList.innerHTML = '';
+            }
 
             // 渲染每個區域區塊
             regionsToRender.forEach(city => {
@@ -427,10 +446,18 @@
                 const initialCount = isSearchMode ? cityPosts.length : Math.min(cityPosts.length, POSTS_PER_LOAD);
                 const hasMore = cityPosts.length > initialCount;
 
-                // 渲染側邊導航項目
+                // 渲染桌面版側邊導航項目
                 const navItem = document.createElement('li');
                 navItem.innerHTML = `<a href="#${safeCityId}" class="block text-slate-600 hover:text-pink font-medium transition duration-150 p-1 rounded-lg">${city} ${cityPosts.length > 0 ? `(${cityPosts.length})` : ''}</a>`;
                 cityNavList.appendChild(navItem);
+
+                // 渲染手機版導航項目
+                if (mobileNavList) {
+                    const mobileNavItem = document.createElement('li');
+                    mobileNavItem.className = 'flex-shrink-0';
+                    mobileNavItem.innerHTML = `<a href="#${safeCityId}" class="inline-block text-sm text-slate-600 hover:text-pink font-medium transition duration-150 px-3 py-1.5 rounded-full bg-slate-50 hover:bg-pink-50 border border-slate-200 hover:border-pink-200 whitespace-nowrap">${city} ${cityPosts.length > 0 ? `(${cityPosts.length})` : ''}</a>`;
+                    mobileNavList.appendChild(mobileNavItem);
+                }
 
                 // 渲染區域區塊
                 const citySection = document.createElement('section');
@@ -564,10 +591,10 @@
                 subtree: true
             });
 
-            // 處理側邊欄點擊平滑捲動
+            // 處理導航點擊平滑捲動的共用函數
             let isScrolling = false; // 防止重複點擊造成多次捲動
             
-            cityNavList.addEventListener('click', function(e) {
+            function handleNavClick(e) {
                 // 找到被點擊的 <a> 標籤（可能是點擊到 <a> 內的文字）
                 const linkElement = e.target.closest('a');
                 if (!linkElement) return;
@@ -593,8 +620,9 @@
                 
                 isScrolling = true;
                 
-                // 計算目標位置（考慮 sticky header 的高度）
-                const headerOffset = 120; // sticky header 的預估高度
+                // 計算目標位置（考慮 sticky header 的高度，手機版需要更大的偏移）
+                const isMobile = window.innerWidth < 1024; // lg 斷點
+                const headerOffset = isMobile ? 180 : 120; // 手機版 header 較高（包含分類導覽）
                 const elementPosition = targetElement.getBoundingClientRect().top;
                 const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
                 
@@ -608,7 +636,15 @@
                 setTimeout(() => {
                     isScrolling = false;
                 }, 1000); // 增加時間以確保捲動完成
-            });
+            }
+            
+            // 為桌面版側邊欄添加點擊事件
+            cityNavList.addEventListener('click', handleNavClick);
+            
+            // 為手機版導航添加點擊事件
+            if (mobileNavList) {
+                mobileNavList.addEventListener('click', handleNavClick);
+            }
         });
     </script>
 
