@@ -112,11 +112,12 @@
         </div>`;
     }
 
-    function renderPosts(regionsToRender, isSearch=false){
+    function renderPosts(regionsToRender, isSearch=false, filteredPosts=[]) {
         postsContainer.innerHTML = '';
         currentPostCounts = {};
         if(regionsToRender.length===0 && document.getElementById('search-input').value.trim()!==''){
-            noResults.classList.remove('hidden'); return;
+            noResults.classList.remove('hidden'); 
+            return;
         } else noResults.classList.add('hidden');
 
         const sortedPosts = [...IG_POSTS].sort((a,b)=> new Date(b.date)-new Date(a.date));
@@ -127,10 +128,14 @@
         }, {});
 
         regionsToRender.forEach(city=>{
-            const cityPosts = groupedPosts[city]||[];
+            // 搜尋時使用 filteredPosts，否則使用 groupedPosts
+            const cityPosts = isSearch 
+                ? filteredPosts.filter(p => p.region === city) 
+                : groupedPosts[city] || [];
+
             const safeCityId = city.replace(/\s+/g,'-');
             const initialCount = isSearch ? cityPosts.length : Math.min(cityPosts.length, POSTS_PER_LOAD);
-            const hasMore = cityPosts.length>initialCount;
+            const hasMore = cityPosts.length > initialCount;
 
             const citySection = document.createElement('section');
             citySection.id = safeCityId;
@@ -141,12 +146,12 @@
                 </h3>
                 <div id="grid-${safeCityId}" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-6"></div>
                 <div class="text-center mt-8">
-                    ${cityPosts.length>0 ? `<button id="load-more-${safeCityId}" onclick="loadMore('${city}')" class="font-bold py-3 px-8 rounded-full shadow-lg transition duration-300 bg-blue hover:bg-blue text-white">${hasMore?`載入更多 (目前已顯示 ${initialCount}/${cityPosts.length} 篇)`:`已顯示全部 ${cityPosts.length} 篇`}</button>`:''}
+                    ${cityPosts.length>0 && !isSearch ? `<button id="load-more-${safeCityId}" onclick="loadMore('${city}')" class="font-bold py-3 px-8 rounded-full shadow-lg transition duration-300 bg-blue hover:bg-blue text-white">${hasMore?`載入更多 (目前已顯示 ${initialCount}/${cityPosts.length} 篇)`:`已顯示全部 ${cityPosts.length} 篇`}</button>` : ''}
                 </div>
             `;
             postsContainer.appendChild(citySection);
             const gridContainer = citySection.querySelector('.grid');
-            for(let i=0;i<initialCount;i++) gridContainer.insertAdjacentHTML('beforeend', createPostCard(cityPosts[i]));
+            for(let i=0; i<initialCount; i++) gridContainer.insertAdjacentHTML('beforeend', createPostCard(cityPosts[i]));
             currentPostCounts[city] = initialCount;
         });
 
@@ -154,13 +159,13 @@
     }
 
     window.filterPosts = function(query){
-        const q=query.trim().toLowerCase();
-        searchQueryDisplay.textContent=q;
+        const q = query.trim().toLowerCase();
+        searchQueryDisplay.textContent = q;
         if(!q) return renderPosts(REGIONS);
 
-        const filteredPosts = IG_POSTS.filter(p=>p.region.toLowerCase().includes(q)||p.content.toLowerCase().includes(q));
+        const filteredPosts = IG_POSTS.filter(p=>p.region.toLowerCase().includes(q) || p.content.toLowerCase().includes(q));
         const regionsToRender = [...new Set(filteredPosts.map(p=>p.region))];
-        renderPosts(regionsToRender,true);
+        renderPosts(regionsToRender, true, filteredPosts); // 傳入 filteredPosts
     }
 
     window.loadMore = function(city){
@@ -186,7 +191,9 @@
         mobileNavList.innerHTML = '';
         REGIONS.forEach(region => {
             const liDesktop = document.createElement('li');
-            liDesktop.innerHTML = `<a href="#${region.replace(/\s+/g,'-')}" class="block px-3 py-1 rounded hover:bg-blue-50 text-blue-600">${region}</a>`;
+            liDesktop.innerHTML = `<a href="#${region.replace(/\s+/g,'-')}" class="block px-3 py-1 rounded hover:bg-blue-50 text-blue-600">
+                ${region} (${IG_POSTS.filter(p => p.region === region).length})
+            </a>`;
             cityNavList.appendChild(liDesktop);
 
             const liMobile = document.createElement('li');
