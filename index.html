@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>a.lazyflower 一朵懶懶花🌸</title>
     
+    <!-- Favicon - 使用 emoji 作為圖標 -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌸</text></svg>">
+    
     <!-- GoatCounter 訪客統計 -->
     <script data-goatcounter="https://lazyflower.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
     
@@ -200,7 +203,7 @@
                 IG: @a.lazyflower
             </a>
             <div class="text-center text-xs text-slate-400 mt-3 pt-3 border-t border-slate-200">
-                網站瀏覽次數: <span id="visit-count" class="font-bold text-blue-600">載入中...</span>
+                網站瀏覽次數: <span id="visit-count" class="font-bold text-blue-600"></span>
             </div>
         </div>
 
@@ -224,7 +227,7 @@
                 </a>
             </div>
             <div class="text-center text-sm text-slate-500 pt-3 border-t border-slate-200">
-                網站瀏覽次數: <span id="visit-count-mobile" class="font-bold text-blue-600">載入中...</span>
+                網站瀏覽次數: <span id="visit-count-mobile" class="font-bold text-blue-600"></span>
             </div>
         </div>
 
@@ -436,16 +439,46 @@
         }
     });
 
-    // GoatCounter 瀏覽次數功能 - 使用圖片計數器
+    // GoatCounter 瀏覽次數功能 - 只顯示純數字
     function updateVisitCount() {
-        const visitCountEl = document.getElementById('visit-count');
-        const mobileCountEl = document.getElementById('visit-count-mobile');
+        // 創建隱藏容器來接收 GoatCounter 的完整 HTML
+        const hiddenContainer = document.createElement('div');
+        hiddenContainer.id = 'gc-hidden-counter';
+        hiddenContainer.style.display = 'none';
+        document.body.appendChild(hiddenContainer);
         
-        // 使用 GoatCounter 的 SVG 圖片計數器（無 CORS 問題）
-        const counterImg = '<img src="https://lazyflower.goatcounter.com/counter/TOTAL.svg" alt="瀏覽次數" style="display:inline-block; vertical-align:middle; max-height:1.2em;">';
+        // 等待 GoatCounter 腳本載入
+        const checkInterval = setInterval(function() {
+            if (window.goatcounter && window.goatcounter.visit_count) {
+                clearInterval(checkInterval);
+                
+                // 將計數器插入到隱藏容器
+                window.goatcounter.visit_count({
+                    append: '#gc-hidden-counter',
+                    type: 'html',
+                    path: 'TOTAL',
+                    no_branding: true
+                });
+                
+                // 等待 GoatCounter 插入 HTML 後提取數字
+                setTimeout(function() {
+                    const viewsElement = document.querySelector('#gc-hidden-counter #gcvc-views');
+                    if (viewsElement) {
+                        const count = viewsElement.textContent.trim();
+                        
+                        // 只將數字設置到目標元素
+                        const visitCountEl = document.getElementById('visit-count');
+                        const mobileCountEl = document.getElementById('visit-count-mobile');
+                        
+                        if (visitCountEl) visitCountEl.textContent = count;
+                        if (mobileCountEl) mobileCountEl.textContent = count;
+                    }
+                }, 1000);
+            }
+        }, 100);
         
-        if (visitCountEl) visitCountEl.innerHTML = counterImg;
-        if (mobileCountEl) mobileCountEl.innerHTML = counterImg;
+        // 10 秒後停止檢查
+        setTimeout(() => clearInterval(checkInterval), 10000);
     }
 
     // 禁止右鍵選單
