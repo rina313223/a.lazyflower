@@ -203,7 +203,7 @@
                 IG: @a.lazyflower
             </a>
             <div class="text-center text-xs text-slate-400 mt-3 pt-3 border-t border-slate-200">
-                網站瀏覽次數: <span id="visit-count" class="font-bold text-blue-600"></span>
+                網站瀏覽次數: <span id="visit-count" class="font-bold text-blue-600">載入中...</span>
             </div>
         </div>
 
@@ -227,7 +227,7 @@
                 </a>
             </div>
             <div class="text-center text-sm text-slate-500 pt-3 border-t border-slate-200">
-                網站瀏覽次數: <span id="visit-count-mobile" class="font-bold text-blue-600"></span>
+                網站瀏覽次數: <span id="visit-count-mobile" class="font-bold text-blue-600">載入中...</span>
             </div>
         </div>
 
@@ -439,46 +439,56 @@
         }
     });
 
-    // GoatCounter 瀏覽次數功能 - 只顯示純數字
+    // GoatCounter 瀏覽次數功能 - 顯示純數字
     function updateVisitCount() {
-        // 創建隱藏容器來接收 GoatCounter 的完整 HTML
-        const hiddenContainer = document.createElement('div');
-        hiddenContainer.id = 'gc-hidden-counter';
-        hiddenContainer.style.display = 'none';
-        document.body.appendChild(hiddenContainer);
+        const visitCountEl = document.getElementById('visit-count');
+        const mobileCountEl = document.getElementById('visit-count-mobile');
+        
+        // 創建隱藏的容器來獲取 GoatCounter 數據
+        const tempContainer = document.createElement('div');
+        tempContainer.id = 'gc-temp-container';
+        tempContainer.style.cssText = 'position:absolute; left:-9999px; visibility:hidden;';
+        document.body.appendChild(tempContainer);
         
         // 等待 GoatCounter 腳本載入
-        const checkInterval = setInterval(function() {
+        let attempts = 0;
+        const maxAttempts = 100;
+        
+        const checkGoatCounter = setInterval(function() {
+            attempts++;
+            
             if (window.goatcounter && window.goatcounter.visit_count) {
-                clearInterval(checkInterval);
+                clearInterval(checkGoatCounter);
                 
-                // 將計數器插入到隱藏容器
+                // 使用 GoatCounter API 獲取計數
                 window.goatcounter.visit_count({
-                    append: '#gc-hidden-counter',
+                    append: '#gc-temp-container',
                     type: 'html',
                     path: 'TOTAL',
                     no_branding: true
                 });
                 
-                // 等待 GoatCounter 插入 HTML 後提取數字
+                // 延遲提取數字
                 setTimeout(function() {
-                    const viewsElement = document.querySelector('#gc-hidden-counter #gcvc-views');
+                    const viewsElement = document.querySelector('#gc-temp-container #gcvc-views');
                     if (viewsElement) {
                         const count = viewsElement.textContent.trim();
-                        
-                        // 只將數字設置到目標元素
-                        const visitCountEl = document.getElementById('visit-count');
-                        const mobileCountEl = document.getElementById('visit-count-mobile');
-                        
                         if (visitCountEl) visitCountEl.textContent = count;
                         if (mobileCountEl) mobileCountEl.textContent = count;
+                    } else {
+                        // 如果無法提取，顯示提示
+                        if (visitCountEl) visitCountEl.textContent = '請啟用設定';
+                        if (mobileCountEl) mobileCountEl.textContent = '請啟用設定';
                     }
-                }, 1000);
+                }, 1500);
+                
+            } else if (attempts >= maxAttempts) {
+                // 超時後使用備用方案
+                clearInterval(checkGoatCounter);
+                if (visitCountEl) visitCountEl.textContent = '未啟用';
+                if (mobileCountEl) mobileCountEl.textContent = '未啟用';
             }
         }, 100);
-        
-        // 10 秒後停止檢查
-        setTimeout(() => clearInterval(checkInterval), 10000);
     }
 
     // 禁止右鍵選單
