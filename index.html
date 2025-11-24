@@ -9,7 +9,13 @@
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌸</text></svg>">
     
     <!-- GoatCounter 訪客統計 -->
-    <script data-goatcounter="https://lazyflower.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+    <script>
+        // Append to the <body>; can use a CSS selector to append somewhere else.
+        window.goatcounter.visit_count({append: 'body'})
+    </script>
+    <script data-goatcounter="https://lazyflower.goatcounter.com/count"
+            async src="//gc.zgo.at/count.js"></script>
+    
     
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Noto+Sans+TC:wght@400;700&display=swap" rel="stylesheet">
@@ -439,56 +445,45 @@
         }
     });
 
-    // GoatCounter 瀏覽次數功能 - 顯示純數字
+    // GoatCounter 瀏覽次數功能 - 使用 JSON API 顯示純數字
     function updateVisitCount() {
         const visitCountEl = document.getElementById('visit-count');
         const mobileCountEl = document.getElementById('visit-count-mobile');
         
-        // 創建隱藏的容器來獲取 GoatCounter 數據
-        const tempContainer = document.createElement('div');
-        tempContainer.id = 'gc-temp-container';
-        tempContainer.style.cssText = 'position:absolute; left:-9999px; visibility:hidden;';
-        document.body.appendChild(tempContainer);
+        // 使用 XMLHttpRequest 獲取 JSON 數據
+        const xhr = new XMLHttpRequest();
         
-        // 等待 GoatCounter 腳本載入
-        let attempts = 0;
-        const maxAttempts = 100;
-        
-        const checkGoatCounter = setInterval(function() {
-            attempts++;
-            
-            if (window.goatcounter && window.goatcounter.visit_count) {
-                clearInterval(checkGoatCounter);
-                
-                // 使用 GoatCounter API 獲取計數
-                window.goatcounter.visit_count({
-                    append: '#gc-temp-container',
-                    type: 'html',
-                    path: 'TOTAL',
-                    no_branding: true
-                });
-                
-                // 延遲提取數字
-                setTimeout(function() {
-                    const viewsElement = document.querySelector('#gc-temp-container #gcvc-views');
-                    if (viewsElement) {
-                        const count = viewsElement.textContent.trim();
-                        if (visitCountEl) visitCountEl.textContent = count;
-                        if (mobileCountEl) mobileCountEl.textContent = count;
-                    } else {
-                        // 如果無法提取，顯示提示
-                        if (visitCountEl) visitCountEl.textContent = '請啟用設定';
-                        if (mobileCountEl) mobileCountEl.textContent = '請啟用設定';
-                    }
-                }, 1500);
-                
-            } else if (attempts >= maxAttempts) {
-                // 超時後使用備用方案
-                clearInterval(checkGoatCounter);
-                if (visitCountEl) visitCountEl.textContent = '未啟用';
-                if (mobileCountEl) mobileCountEl.textContent = '未啟用';
+        xhr.addEventListener('load', function() {
+            if (xhr.status === 200) {
+                try {
+                    const data = JSON.parse(xhr.responseText);
+                    const count = data.count || '0';
+                    
+                    // 顯示純數字
+                    if (visitCountEl) visitCountEl.textContent = count;
+                    if (mobileCountEl) mobileCountEl.textContent = count;
+                } catch (e) {
+                    console.error('解析 JSON 失敗:', e);
+                    if (visitCountEl) visitCountEl.textContent = '載入失敗';
+                    if (mobileCountEl) mobileCountEl.textContent = '載入失敗';
+                }
+            } else {
+                // 如果返回 404 或其他錯誤
+                console.log('GoatCounter API 返回錯誤:', xhr.status);
+                if (visitCountEl) visitCountEl.textContent = '暫無數據';
+                if (mobileCountEl) mobileCountEl.textContent = '暫無數據';
             }
-        }, 100);
+        });
+        
+        xhr.addEventListener('error', function() {
+            console.error('無法連接到 GoatCounter');
+            if (visitCountEl) visitCountEl.textContent = '連線失敗';
+            if (mobileCountEl) mobileCountEl.textContent = '連線失敗';
+        });
+        
+        // 使用 TOTAL 路徑獲取網站總瀏覽次數
+        xhr.open('GET', 'https://lazyflower.goatcounter.com/counter/TOTAL.json');
+        xhr.send();
     }
 
     // 禁止右鍵選單
