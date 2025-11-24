@@ -436,31 +436,16 @@
         }
     });
 
-    // GoatCounter 瀏覽次數功能
-    async function updateVisitCount() {
-        try {
-            // 從 GoatCounter API 取得瀏覽次數
-            const response = await fetch('https://lazyflower.goatcounter.com/counter/TOTAL.json');
-            const data = await response.json();
-            const totalCount = data.count || 0;
-            
-            const countDisplay = totalCount.toLocaleString();
-            const visitCountEl = document.getElementById('visit-count');
-            const mobileCountEl = document.getElementById('visit-count-mobile');
-            
-            if (visitCountEl) visitCountEl.textContent = countDisplay;
-            if (mobileCountEl) mobileCountEl.textContent = countDisplay;
-        } catch (error) {
-            // 如果無法取得數據，顯示圖片計數器
-            const visitCountEl = document.getElementById('visit-count');
-            const mobileCountEl = document.getElementById('visit-count-mobile');
-            
-            // 使用 GoatCounter 的圖片計數器
-            const counterImg = '<img src="https://lazyflower.goatcounter.com/counter/TOTAL.svg" alt="瀏覽次數" style="display:inline-block; height:1.2em; vertical-align:middle;">';
-            
-            if (visitCountEl) visitCountEl.innerHTML = counterImg;
-            if (mobileCountEl) mobileCountEl.innerHTML = counterImg;
-        }
+    // GoatCounter 瀏覽次數功能 - 使用圖片計數器
+    function updateVisitCount() {
+        const visitCountEl = document.getElementById('visit-count');
+        const mobileCountEl = document.getElementById('visit-count-mobile');
+        
+        // 使用 GoatCounter 的 SVG 圖片計數器（無 CORS 問題）
+        const counterImg = '<img src="https://lazyflower.goatcounter.com/counter/TOTAL.svg" alt="瀏覽次數" style="display:inline-block; vertical-align:middle; max-height:1.2em;">';
+        
+        if (visitCountEl) visitCountEl.innerHTML = counterImg;
+        if (mobileCountEl) mobileCountEl.innerHTML = counterImg;
     }
 
     // 禁止右鍵選單
