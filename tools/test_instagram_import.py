@@ -165,3 +165,37 @@ def test_run_from_instagram_reports_missing_token(tmp_path, monkeypatch, capsys)
     monkeypatch.delenv(api.TOKEN_ENV_KEY, raising=False)
     assert ip.run_from_instagram(tmp_path / 'posts.js', True, False, None, env_path=tmp_path / '.env') == 1
     assert 'IG_ACCESS_TOKEN' in capsys.readouterr().out
+
+
+def test_fetch_since_keeps_boundary_day_and_stops_paging():
+    session = media_session()
+    # PAGE_1 的 NEW1 是台灣時間 2025-10-02；since 當天要包含
+    media_list = api.fetch_all_media('TOKEN', session, since='2025-10-02')
+    assert [media['id'] for media in media_list] == ['1']
+    # 第 2 頁全部早於 since → 抓完第 2 頁就停止（不會再要下一頁）
+    assert len(session.calls) == 2
+
+
+def test_fetch_since_stops_after_first_fully_older_page():
+    session = media_session()
+    assert api.fetch_all_media('TOKEN', session, since='2025-12-01') == []
+    assert len(session.calls) == 1
+
+
+def test_fetch_since_filters_inside_mixed_page():
+    session = media_session()
+    media_list = api.fetch_all_media('TOKEN', session, since='2025-08-15')
+    assert [media['id'] for media in media_list] == ['1', '2']
+
+
+def test_parse_since_date_validates_format():
+    assert ip.parse_since_date('2026-10-01') == '2026-10-01'
+    for bad_value in ['2026/10/01', '2026-13-01', 'yesterday']:
+        with pytest.raises(ip.argparse.ArgumentTypeError):
+            ip.parse_since_date(bad_value)
+
+
+def test_cli_rejects_bad_since(capsys):
+    with pytest.raises(SystemExit):
+        ip.main(['--from-instagram', '--since', '2026/10/1'])
+    assert 'YYYY-MM-DD' in capsys.readouterr().err

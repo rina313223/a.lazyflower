@@ -78,17 +78,29 @@ def _get_json(session, url, params=None):
     return payload
 
 
-def fetch_all_media(token, session, limit=None):
-    """依分頁取回所有貼文（新到舊）。limit 可限制最多取幾篇。"""
+def is_on_or_after(media, since):
+    return timestamp_to_date(media.get('timestamp')) >= since
+
+
+def fetch_all_media(token, session, limit=None, since=None):
+    """依分頁取回貼文（新到舊）。limit 限制最多幾篇；since（'YYYY-MM-DD'，台灣時間）只取該日以後。"""
     media_list = []
     url = f'{GRAPH_BASE_URL}/me/media'
     params = {'fields': MEDIA_FIELDS, 'limit': PAGE_SIZE, 'access_token': token}
     while url:
-        payload = _get_json(session, url, params)
-        media_list.extend(payload.get('data', []))
+        page = _get_json(session, url, params)
+        page_media = page.get('data', [])
+        if since:
+            kept = [media for media in page_media if is_on_or_after(media, since)]
+            media_list.extend(kept)
+            # 整頁都早於 since 才停止（逐筆判斷，置頂貼文順序例外也不會提早中斷）
+            if page_media and not kept:
+                break
+        else:
+            media_list.extend(page_media)
         if limit and len(media_list) >= limit:
             return media_list[:limit]
-        url = payload.get('paging', {}).get('next')
+        url = page.get('paging', {}).get('next')
         params = None  # next 連結已包含所有參數
     return media_list
 

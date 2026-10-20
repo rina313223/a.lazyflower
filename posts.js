@@ -13992,36 +13992,7 @@ Kenty同款 拿坡里甜甜圈💙
 #懶懶花吃台北 #台北美食 #松山美食 #台北冰品`
         },
         {
-            region: '台中 Taichung',
-            permalink: 'https://www.instagram.com/reel/DaAi0c7yxHn/',
-            date: '2026-06-25',
-            map: 'https://www.google.com/maps/search/?api=1&query=KosharyAbouTarek%20%D9%A1%D9%A6%20Marouf%2C%20Qasr%20El%20Nil%2C%20Cairo%20Governorate%204272135%E5%9F%83%E5%8F%8A',
-            content: `✨️#KosharyAbouTarek
-
-🍽庫莎麗／65埃鎊
-扁豆湯／60埃鎊
-
-🏡地址：١٦ Marouf, Qasr El Nil, Cairo Governorate 4272135埃及
-🕑營業時間：09:00～23:00
-
-✏️落地埃及的第一餐🇪🇬
-感受到埃及人的滿滿熱情❤️
-餐點份量都很多！
-那個用麵包裝的扁豆湯🥣
-我自己覺得還好😅
-
-國民美食「庫莎麗 Koshary」 💥💥
-吃起來像把滷肉飯的滿足感、
-義大利麵的Q彈、
-還有鹹酥雞上炸蒜酥的香氣
-全部融為一體😚
-淋上酸酸辣辣的大蒜番茄醬攪拌一起吃
-是去埃及必吃的澱粉炸彈💥💥
-
-#花現埃及 #埃及美食 #egypt #koshary`
-        },
-        {
-            region: '台中 Taichung',
+            region: '埃及 Egypt',
             permalink: 'https://www.instagram.com/reel/DaAia5YyU8T/',
             date: '2026-06-25',
             map: 'https://www.google.com/maps/search/?api=1&query=KosharyAbouTarek%20%D9%A1%D9%A6%20Marouf%2C%20Qasr%20El%20Nil%2C%20Cairo%20Governorate%204272135%E5%9F%83%E5%8F%8A',
@@ -14327,34 +14298,6 @@ Jordi 1樓也有分店
         },
         {
             region: '台中 Taichung',
-            permalink: 'https://www.instagram.com/reel/DbN6qMtTvm0/',
-            date: '2026-07-25',
-            map: 'https://www.google.com/maps/search/?api=1&query=MisterDonuts%20%E5%85%A8%E5%8F%B0Mister%20Donuts%20%EF%BC%8F%207-ELEVEN%20Mister%20Donut%E5%B0%88%E6%AB%83',
-            content: `✨️#MisterDonuts
-
-🍽豆香萌奇圈／$55
-草莓萌奇圈／$65
-
-🏡地址：全台Mister Donuts ／ 7-ELEVEN Mister Donut專櫃
-
-✏️日本超夯的 もっちゅりん 萌奇圈🍩
-6月底龜梨和也見面會上聽到就很想吃
-7月底在台灣也吃得到了😍
-
-滿滿的黃豆粉／草莓粉，有夠香🤤
-像是麻糬燒外皮的口感
-但又更有嚼勁
-咀嚼控會喜歡的！
-草莓口味還有包草莓醬🍓
-嚼勁度：豆香＞草莓
-
-可惜去的那間日式醬油賣完了🥲🥲
-不然也好想試試～
-
-#懶懶花吃台中 #台中美食 #台中甜點 #甜甜圈`
-        },
-        {
-            region: '台中 Taichung',
             permalink: 'https://www.instagram.com/reel/Dbme7hOzl3d/',
             date: '2026-08-04',
             map: '',
@@ -14565,41 +14508,11 @@ Jordi 1樓也有分店
         },
         {
             region: '台中 Taichung',
-            permalink: 'https://www.instagram.com/reel/DcP8VAvTFGA/',
-            date: '2026-08-20',
-            map: 'https://www.google.com/maps/search/?api=1&query=%E7%B7%A9%E8%A1%9D%E8%8C%B6%E9%A4%A8%20%E8%87%BA%E4%B8%AD%E5%B8%82%E6%B2%99%E9%B9%BF%E5%8D%80%E5%85%AD%E8%B7%AF%E9%87%8C%E5%8F%B0%E7%81%A3%E5%A4%A7%E9%81%93%E5%85%AD%E6%AE%B5765%E8%99%9F',
-            content: `✨️#緩衝茶館
-
-🍽布丁／$80
-六時披薩 BBQ蒜香烤嫩雞／$160 
-蜂蜜葡萄柚茶／$130
-
-🏡地址：臺中市沙鹿區六路里台灣大道六段765號
-🕑營業時間：
-週二～五｜15:00～22:00
-週六、日｜13:00～22:00
-☎️電話：0907 529 520
-
-✏️沙鹿開到深夜的咖啡廳☕️
-位於台灣大道公車站旁
-空間舒適放鬆，鹹甜食也好吃！
-
-治癒人心的焦糖布丁🍮
-滑嫩還帶點微苦焦香
-披薩配料豐富，有鹹鹹甜甜的爽脆感🤤
-蜂蜜葡萄柚茶
-微甜喝得到葡萄柚的微苦清香～
-
-找一天不趕時間
-好好放鬆、緩衝一下🍵
-
-#懶懶花吃台中 #台中美食 #沙鹿美食 #台中下午茶`
-        },
-        {
-            region: '台中 Taichung',
             permalink: 'https://www.instagram.com/reel/DcP67-lzTl_/',
             date: '2026-08-20',
-            map: 'https://www.google.com/maps/search/?api=1&query=%E7%B7%A9%E8%A1%9D%E8%8C%B6%E9%A4%A8%20%E8%87%BA%E4%B8%AD%E5%B8%82%E6%B2%99%E9%B9%BF%E5%8D%80%E5%85%AD%E8%B7%AF%E9%87%8C%E5%8F%B0%E7%81%A3%E5%A4%A7%E9%81%93%E5%85%AD%E6%AE%B5765%E8%99%9F',
+            map: 'https://maps.app.goo.gl/Eg7VAkVLtnyJWN5d6',
+            lat: 24.210311,
+            lng: 120.581089,
             content: `✨️#緩衝茶館
 
 🍽布丁／$80
@@ -14856,30 +14769,9 @@ Brunch Brother 保冷箱超可愛！
             region: '日本 Japan',
             permalink: 'https://www.instagram.com/reel/DdYzQ6huXBZ/',
             date: '2026-09-17',
-            map: 'https://www.google.com/maps/search/?api=1&query=THE_MATCHA_TOKYO%20%E7%A6%8F%E5%B2%A1%E6%A9%9F%E5%A0%B4%203F%E5%9C%8B%E9%9A%9B%E7%B7%9A',
-            content: `✨️#THE_MATCHA_TOKYO
-
-🍽抹茶コーヒーラテ／¥950
-抹茶咖啡拿鐵
-
-🏡地址：福岡機場 3F國際線
-出境安檢後 51A 登機口旁
-🕑營業時間：8:00～20:30
-
-✏️福岡機場的抹茶咖啡拿鐵🍵☕️
-看脆上分享特地去喝的！
-
-濃郁抹茶+微苦咖啡
-真的有提神醒腦～～
-喝完再面對旅遊即將結束的現實🥹
-
-#福岡機場 #福岡美食 #日本美食 #抹茶控`
-        },
-        {
-            region: '日本 Japan',
-            permalink: 'https://www.instagram.com/reel/DdYyCunzWna/',
-            date: '2026-09-17',
-            map: 'https://www.google.com/maps/search/?api=1&query=THE_MATCHA_TOKYO%20%E7%A6%8F%E5%B2%A1%E6%A9%9F%E5%A0%B4%203F%E5%9C%8B%E9%9A%9B%E7%B7%9A',
+            map: 'https://maps.app.goo.gl/bQe7aDMKKjSZRibe7',
+            lat: 33.587736,
+            lng: 130.443121,
             content: `✨️#THE_MATCHA_TOKYO
 
 🍽抹茶コーヒーラテ／¥950

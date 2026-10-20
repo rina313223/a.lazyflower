@@ -10,6 +10,8 @@
     python tools/import_posts.py --no-geocode # 不連網查座標
     python tools/import_posts.py --from-instagram           # 直接從 IG 官方 API 抓所有貼文（免貼 inbox）
     python tools/import_posts.py --from-instagram --limit 5 # 只抓最新 5 篇（試跑用）
+    python tools/import_posts.py --from-instagram --since 2026-10-01  # 只匯入該日以後的貼文
+    python tools/import_posts.py --report-missing [--csv]  # 列出不在地圖上的文章
 
 inbox.txt 格式（多篇用一行 --- 分隔）：
     https://www.instagram.com/p/XXXXXXXX/
@@ -467,17 +469,18 @@ def refresh_token_if_possible(token, session, env_path):
     return new_token
 
 
-def run_from_instagram(posts_path, dry_run, enable_geocode, limit, env_path=instagram_api.DEFAULT_ENV_PATH):
+def run_from_instagram(posts_path, dry_run, enable_geocode, limit, env_path=instagram_api.DEFAULT_ENV_PATH, since=None):
     session = requests.Session()
     try:
         token = instagram_api.load_access_token(env_path)
         token = refresh_token_if_possible(token, session, env_path)
-        media_list = instagram_api.fetch_all_media(token, session, limit)
+        media_list = instagram_api.fetch_all_media(token, session, limit, since)
     except instagram_api.InstagramApiError as error:
         print(f'❌ {error}')
         return 1
 
-    print(f'從 Instagram 取得 {len(media_list)} 篇貼文')
+    since_note = f'（{since} 以後）' if since else ''
+    print(f'從 Instagram 取得 {len(media_list)} 篇貼文{since_note}')
     entries = [entry_from_media(media) for media in media_list if media.get('permalink')]
     entries.sort(key=lambda entry: entry['date'])
     import_entries(posts_path, entries, dry_run, enable_geocode, generate_map_search=True)
@@ -578,6 +581,14 @@ def run_report_missing(posts_path, write_csv):
     return 0
 
 
+def parse_since_date(value):
+    """argparse 用：驗證 YYYY-MM-DD，回傳正規化字串（例如 2026-10-01）。"""
+    try:
+        return datetime.strptime(value, '%Y-%m-%d').strftime('%Y-%m-%d')
+    except ValueError:
+        raise argparse.ArgumentTypeError(f'日期格式需為 YYYY-MM-DD（例如 2026-10-01），收到：{value}')
+
+
 def main(argv=None):
     parser = argparse.ArgumentParser(description='批次匯入 IG 食記到 posts.js')
     parser.add_argument('--posts', type=Path, default=DEFAULT_POSTS_PATH, help='posts.js 路徑')
@@ -587,6 +598,8 @@ def main(argv=None):
     parser.add_argument('--no-geocode', action='store_true', help='不連網查詢座標')
     parser.add_argument('--from-instagram', action='store_true', help='從 IG 官方 API 抓取自己帳號的所有貼文')
     parser.add_argument('--limit', type=int, default=None, help='搭配 --from-instagram：最多抓幾篇（新到舊）')
+    parser.add_argument('--since', type=parse_since_date, default=None, metavar='YYYY-MM-DD',
+                        help='搭配 --from-instagram：只匯入該日（含）以後的貼文，台灣時間')
     parser.add_argument('--report-missing', action='store_true', help='列出不會出現在地圖上的文章（只讀）')
     parser.add_argument('--csv', action='store_true', help='搭配 --report-missing：另存 tools/missing_coordinates.csv')
     args = parser.parse_args(argv)
@@ -598,7 +611,7 @@ def main(argv=None):
     if args.backfill:
         return run_backfill(args.posts, args.dry_run)
     if args.from_instagram:
-        return run_from_instagram(args.posts, args.dry_run, not args.no_geocode, args.limit)
+        return run_from_instagram(args.posts, args.dry_run, not args.no_geocode, args.limit, since=args.since)
     return run_import(args.posts, args.inbox, args.dry_run, not args.no_geocode)
 
 
