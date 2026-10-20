@@ -76,8 +76,40 @@ def test_extract_coordinates_prefers_place_pin():
 
 
 def test_address_candidates_go_from_precise_to_coarse():
-    assert ip.address_candidates('臺中市東區進德路600號5樓') == ['台中市東區進德路600號5樓', '台中市東區進德路600號', '台中市東區進德路']
+    assert ip.address_candidates('臺中市東區進德路600號5樓') == ['台中市東區進德路600號5樓', '台中市東區進德路600號', '進德路, 東區, 臺中市']
     assert ip.address_candidates('') == []
+
+
+def test_taiwan_candidates_strip_postal_code_and_village():
+    assert ip.address_candidates('403台中市西區民生路380-2號') == ['台中市西區民生路380-2號', '民生路, 西區, 臺中市']
+    assert ip.address_candidates('臺中市沙鹿區六路里台灣大道六段765號')[-1] == '臺灣大道六段, 沙鹿區, 臺中市'
+    assert ip.address_candidates('台中市大里區中里路12號')[-1] == '中里路, 大里區, 臺中市'  # 路名含「里」不可誤刪
+    assert ip.address_candidates('全台星巴克門市') == ['全台星巴克門市']
+
+
+def test_japan_candidates_use_postal_code():
+    assert ip.address_candidates('日本〒144-0041 Tokyo, Ota City, Hanedakuko', 'jp') == ['144-0041']
+    assert ip.address_candidates('5 Chome-66-7 Nakano, Tokyo 164-0001日本', 'jp') == ['164-0001']
+    assert ip.address_candidates('福岡縣福岡市博多區', 'jp') == []
+
+
+def test_region_from_address_ignores_postal_prefix():
+    assert ip.region_from_address('701台南市東區林森路一段276號', '#懶懶花吃台中') == '台南 Tainan'
+
+
+def test_country_code_for_region():
+    assert ip.country_code_for_region('日本 Japan') == 'jp'
+    assert ip.country_code_for_region('台中 Taichung') == 'tw'
+    assert ip.country_code_for_region('') == 'tw'
+
+
+def test_resolve_map_link_never_fetches_search_urls():
+    class ExplodingSession:
+        def get(self, *args, **kwargs):
+            raise AssertionError('不應對搜尋連結發出請求')
+
+    assert ip.resolve_map_link('https://www.google.com/maps/search/?api=1&query=%E5%BA%97', ExplodingSession()) is None
+    assert ip.resolve_map_link('https://www.google.com/maps/search/?api=1&query=24.1,120.6', ExplodingSession()) == (24.1, 120.6)
 
 
 def test_format_post_entry_escapes_template_literal():
@@ -106,19 +138,19 @@ def test_append_entries_rejects_unknown_format():
 def test_backfill_only_touches_posts_without_coordinates():
     calls = []
 
-    def fake_finder(map_url, address):
-        calls.append((map_url, address))
+    def fake_finder(map_url, address, region):
+        calls.append((map_url, address, region))
         return (24.5, 120.7), 'fake'
 
     updated, filled, failures = ip.backfill_coordinates(POSTS_SOURCE, fake_finder)
     assert filled == 1 and failures == []
-    assert calls == [('https://maps.app.goo.gl/x', '台中市北區榮華街156號')]
+    assert calls == [('https://maps.app.goo.gl/x', '台中市北區榮華街156號', '台中 Taichung')]
     assert updated.count('lat:') == 2
     assert "map: 'https://maps.app.goo.gl/x',\n        lat: 24.500000,\n        lng: 120.700000,\n" in updated
 
 
 def test_backfill_reports_failures():
-    _, filled, failures = ip.backfill_coordinates(POSTS_SOURCE, lambda url, address: (None, ''))
+    _, filled, failures = ip.backfill_coordinates(POSTS_SOURCE, lambda url, address, region: (None, ''))
     assert filled == 0
     assert failures == ['台中市北區榮華街156號']
 
@@ -129,3 +161,35 @@ def test_write_preserving_newline_keeps_crlf(tmp_path):
     newline = ip.detect_newline(target)
     ip.write_preserving_newline(target, 'a\nb\nc\n', newline)
     assert target.read_bytes() == b'a\r\nb\r\nc\r\n'
+
+
+REPORT_SOURCE = POSTS_SOURCE.replace(
+    "content: `✨️#已有座標`",
+    "content: `✨️#已有座標`\n    },\n    {\n        region: '台中 Taichung',\n"
+    "        permalink: 'https://www.instagram.com/p/CCC/',\n        date: '2025-03-01',\n"
+    "        map: '',\n        content: `今天開箱 \`耳機\``",
+)
+
+
+def test_parse_posts_source_reads_all_posts_with_escaped_backticks():
+    posts = ip.parse_posts_source(REPORT_SOURCE)
+    assert [post['permalink'][-4:-1] for post in posts] == ['AAA', 'BBB', 'CCC']
+    assert [post['has_coordinates'] for post in posts] == [False, True, False]
+    assert posts[2]['content'] == '今天開箱 \`耳機\`'
+
+
+def test_missing_coordinate_rows_orders_not_found_before_no_address():
+    rows = ip.missing_coordinate_rows(ip.parse_posts_source(REPORT_SOURCE))
+    assert [(row['reason'], row['title']) for row in rows] == [('查不到座標', '舊店'), ('無地址', '今天開箱 \`耳機\`')]
+    assert rows[0]['address'] == '台中市北區榮華街156號'
+    assert '地址：台中市北區榮華街156號' in ip.format_report_row(rows[0])
+    assert '地址：' not in ip.format_report_row(rows[1])
+
+
+def test_write_report_csv_is_excel_friendly(tmp_path):
+    rows = ip.missing_coordinate_rows(ip.parse_posts_source(REPORT_SOURCE))
+    csv_path = tmp_path / 'missing.csv'
+    ip.write_report_csv(rows, csv_path)
+    raw = csv_path.read_bytes()
+    assert raw.startswith(b'\xef\xbb\xbf')
+    assert '查不到座標' in raw.decode('utf-8-sig')

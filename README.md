@@ -35,6 +35,11 @@ python tools/import_posts.py --from-instagram
 ### 幫舊文章補座標
 `python tools/import_posts.py --backfill`
 
+### 找出不在地圖上的文章
+`python tools/import_posts.py --report-missing`（加 `--csv` 另存 `tools/missing_coordinates.csv`，可用 Excel 開）
+
+補法：在 Google 地圖找到店家 →「分享」複製 `maps.app.goo.gl` 連結 → 貼到 posts.js 該篇的 `map: '...'` → 執行 `--backfill`。
+
 ### 測試
 - `node --test tests/postParser.test.mjs`
 - `python -m pytest tools/`

@@ -4,3 +4,4 @@ tools/inbox_history/
 __pycache__/
 .pytest_cache/
 tools/.env
+tools/missing_coordinates.csv

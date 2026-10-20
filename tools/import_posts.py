@@ -22,10 +22,12 @@ inbox.txt 格式（多篇用一行 --- 分隔）：
 """
 
 import argparse
+import csv
 import re
 import shutil
 import sys
 import time
+import unicodedata
 from datetime import datetime
 from pathlib import Path
 from urllib.parse import quote
@@ -47,6 +49,15 @@ COMMENT_PREFIX = '//'
 SHORTCODE_PATTERN = re.compile(r'instagram\.com/(?:[^/]+/)?(?:p|reel|tv)/([A-Za-z0-9_-]+)')
 ADDRESS_PATTERN = re.compile(r'地址[：:]\s*(.+)')
 GOOGLE_MAPS_SEARCH_URL = 'https://www.google.com/maps/search/?api=1&query='
+POSTAL_PREFIX_PATTERN = re.compile(r'^\s*\d{3,6}')
+JP_POSTAL_PATTERN = re.compile(r'(\d{3})\s*[-−ー]\s*(\d{4})')
+# 縣市 + 鄉鎮市區 +（選填）村里 +（選填）鄰 + 其餘（路段門牌）
+TW_ADDRESS_PATTERN = re.compile(
+    r'^(?P<city>.{2}[市縣])(?P<district>.{1,3}?[區鎮鄉市])'
+    r'(?:[^\d]{1,3}?[村里](?![路街道段巷]))?(?:\d+鄰)?(?P<rest>.+)$'
+)
+TW_ROAD_PATTERN = re.compile(r'^(.+?(?:大道|路|街|道)(?:[一二三四五六七八九十]段)?)')
+JAPAN_REGION = '日本 Japan'
 COORDINATE_PATTERNS = (
     re.compile(r'!3d(-?\d+\.\d+)!4d(-?\d+\.\d+)'),
     re.compile(r'@(-?\d+\.\d+),(-?\d+\.\d+)'),
@@ -95,8 +106,13 @@ def extract_address(content):
     return match.group(1).strip() if match else ''
 
 
+def normalize_taiwan_address(address):
+    """去掉開頭郵遞區號與空白，統一「臺」為「台」，方便比對。"""
+    return re.sub(r'\s+', '', POSTAL_PREFIX_PATTERN.sub('', address or '')).replace('臺', '台')
+
+
 def region_from_address(address, content):
-    normalized = (address or '').replace('臺', '台')
+    normalized = normalize_taiwan_address(address)
     for city, region in CITY_TO_REGION.items():
         if normalized.startswith(city):
             return region
@@ -165,6 +181,8 @@ def resolve_map_link(map_url, session):
     direct = extract_coordinates_from_url(map_url)
     if direct:
         return direct
+    if '/maps/search/' in map_url:
+        return None  # 自動產生的搜尋連結：頁面內的座標是預設視角，不可信
     try:
         response = session.get(map_url, allow_redirects=True, timeout=HTTP_TIMEOUT_S)
         return extract_coordinates_from_url(response.url) or extract_coordinates_from_url(response.text[:200000])
@@ -172,19 +190,38 @@ def resolve_map_link(map_url, session):
         return None
 
 
-def address_candidates(address):
-    """由精確到粗略：完整地址 → 去掉樓層 → 只到路段。"""
-    normalized = (address or '').replace('臺', '台').strip()
+def _unique(values):
+    return list(dict.fromkeys(value for value in values if value))
+
+
+def taiwan_address_candidates(address):
+    """由精確到粗略：完整地址 → 去掉樓層 → 「路段, 行政區, 縣市」（OSM 慣用「臺」）。"""
+    normalized = normalize_taiwan_address(address)
     if not normalized:
         return []
-    candidates = [normalized]
-    up_to_number = re.split(r'(?<=號)', normalized)[0]
-    if up_to_number not in candidates:
-        candidates.append(up_to_number)
-    road_match = re.match(r'(.+?[路街道](?:[一二三四五六七八九十]段)?)', normalized)
-    if road_match and road_match.group(1) not in candidates:
-        candidates.append(road_match.group(1))
-    return candidates
+    candidates = [normalized, re.split(r'(?<=號)', normalized)[0]]
+    parts = TW_ADDRESS_PATTERN.match(normalized)
+    road = TW_ROAD_PATTERN.match(parts.group('rest')) if parts else None
+    if road:
+        structured = f"{road.group(1)}, {parts.group('district')}, {parts.group('city')}"
+        candidates.append(structured.replace('台', '臺'))
+    return _unique(candidates)
+
+
+def japan_address_candidates(address):
+    """日本地址格式混雜（中英日），以郵遞區號查詢最穩定（精確到町丁目）。"""
+    postal = JP_POSTAL_PATTERN.search(unicodedata.normalize('NFKC', address or ''))
+    return [f'{postal.group(1)}-{postal.group(2)}'] if postal else []
+
+
+def address_candidates(address, country_code='tw'):
+    if country_code == 'jp':
+        return japan_address_candidates(address)
+    return taiwan_address_candidates(address)
+
+
+def country_code_for_region(region):
+    return 'jp' if region == JAPAN_REGION else 'tw'
 
 
 class NominatimGeocoder:
@@ -198,13 +235,13 @@ class NominatimGeocoder:
             time.sleep(NOMINATIM_MIN_INTERVAL_S - elapsed)
         self.last_request_at = time.monotonic()
 
-    def geocode(self, address):
-        for query in address_candidates(address):
+    def geocode(self, address, country_code='tw'):
+        for query in address_candidates(address, country_code):
             self._wait_rate_limit()
             try:
                 response = self.session.get(
                     NOMINATIM_URL,
-                    params={'q': query, 'format': 'json', 'limit': 1, 'countrycodes': 'tw'},
+                    params={'q': query, 'format': 'json', 'limit': 1, 'countrycodes': country_code},
                     timeout=HTTP_TIMEOUT_S,
                 )
                 results = response.json() if response.ok else []
@@ -215,11 +252,11 @@ class NominatimGeocoder:
         return None
 
 
-def find_coordinates(map_url, address, session, geocoder):
+def find_coordinates(map_url, address, session, geocoder, country_code='tw'):
     coordinates = resolve_map_link(map_url, session)
     if coordinates:
         return coordinates, 'Google 地圖連結'
-    coordinates = geocoder.geocode(address) if address else None
+    coordinates = geocoder.geocode(address, country_code) if address else None
     if coordinates:
         return coordinates, 'OSM 地址查詢'
     return None, ''
@@ -265,6 +302,7 @@ def append_entries(posts_source, entry_blocks):
     return posts_source[:insertion_point] + addition + '\n];\n'
 
 
+REGION_LINE_PATTERN = re.compile(r"region:\s*'([^']*)'")
 MAP_LINE_PATTERN = re.compile(r"^(?P<indent>[ \t]*)map:\s*'(?P<url>[^']*)',[ \t]*\r?\n(?!\s*lat:)", re.MULTILINE)
 
 
@@ -275,10 +313,12 @@ def backfill_coordinates(posts_source, coordinate_finder):
     filled = 0
     failures = []
     for match in MAP_LINE_PATTERN.finditer(posts_source):
+        region_match = REGION_LINE_PATTERN.findall(posts_source, 0, match.start())
+        region = region_match[-1] if region_match else ''
         next_content = posts_source[match.end():match.end() + 3000]
         content_end = next_content.find('`', next_content.find('`') + 1)
         address = extract_address(next_content[:content_end if content_end > 0 else None])
-        coordinates, _source = coordinate_finder(match.group('url'), address)
+        coordinates, _source = coordinate_finder(match.group('url'), address, region)
         pieces.append(posts_source[cursor:match.end()])
         if coordinates:
             indent = match.group('indent')
@@ -333,10 +373,10 @@ def build_coordinate_finder(enable_geocode):
     session.headers.update(HTTP_HEADERS)
     geocoder = NominatimGeocoder(session)
 
-    def finder(map_url, address):
+    def finder(map_url, address, region=''):
         if not enable_geocode:
             return None, ''
-        return find_coordinates(map_url, address, session, geocoder)
+        return find_coordinates(map_url, address, session, geocoder, country_code_for_region(region))
     return finder
 
 
@@ -368,7 +408,7 @@ def import_entries(posts_path, entries, dry_run, enable_geocode, generate_map_se
             print(f'⏭  {label} 已存在，略過')
             continue
         known.add(entry['shortcode'])
-        coordinates, source = finder(entry['map'], entry['address'])
+        coordinates, source = finder(entry['map'], entry['address'], entry['region'])
         if generate_map_search and not entry['map']:
             entry = {**entry, 'map': build_map_search_url(entry['content'], entry['address'])}
         status = f'📍 {coordinates[0]:.5f}, {coordinates[1]:.5f}（{source}）' if coordinates else '⚠️ 無座標（不會出現在地圖上）'
@@ -460,6 +500,84 @@ def run_backfill(posts_path, dry_run):
     return 0
 
 
+# ---------- 缺座標報表 ----------
+
+POST_OBJECT_PATTERN = re.compile(
+    r"region:\s*'(?P<region>[^']*)',\s*"
+    r"permalink:\s*'(?P<permalink>[^']*)',\s*"
+    r"date:\s*'(?P<date>[^']*)',\s*"
+    r"map:\s*'(?P<map>[^']*)',\s*"
+    r"(?:lat:\s*(?P<lat>-?[\d.]+),\s*lng:\s*-?[\d.]+,\s*)?"
+    r"content:\s*`(?P<content>(?:\\.|[^`\\])*)`"
+)
+REASON_NOT_FOUND = '查不到座標'
+REASON_NO_ADDRESS = '無地址'
+REASON_PRIORITY = {REASON_NOT_FOUND: 0, REASON_NO_ADDRESS: 1}
+REPORT_CSV_PATH = Path(__file__).resolve().parent / 'missing_coordinates.csv'
+
+
+def parse_posts_source(posts_source):
+    """從 posts.js 文字取出每篇文章的欄位（只讀，不執行 JS）。"""
+    return [
+        {
+            'region': match.group('region'),
+            'permalink': match.group('permalink'),
+            'date': match.group('date'),
+            'map': match.group('map'),
+            'has_coordinates': match.group('lat') is not None,
+            'content': match.group('content'),
+        }
+        for match in POST_OBJECT_PATTERN.finditer(posts_source)
+    ]
+
+
+def missing_coordinate_rows(posts):
+    """不會出現在地圖上的文章：先列「查不到座標」（多為食記），再列「無地址」；同類由新到舊。"""
+    rows = []
+    for post in posts:
+        if post['has_coordinates']:
+            continue
+        address = extract_address(post['content'])
+        rows.append({
+            'reason': REASON_NOT_FOUND if address else REASON_NO_ADDRESS,
+            'date': post['date'],
+            'title': extract_title(post['content']) or '(無內文)',
+            'region': post['region'],
+            'permalink': post['permalink'],
+            'address': address,
+        })
+    rows.sort(key=lambda row: row['date'], reverse=True)
+    rows.sort(key=lambda row: REASON_PRIORITY[row['reason']])
+    return rows
+
+
+def format_report_row(row):
+    line = f"[{row['reason']}] {row['date']}  {row['title'][:24]}  {row['region'].split(' ')[0]}  {row['permalink']}"
+    return f"{line}\n    地址：{row['address']}" if row['address'] else line
+
+
+def write_report_csv(rows, csv_path):
+    fieldnames = ['reason', 'date', 'title', 'region', 'permalink', 'address']
+    with csv_path.open('w', encoding='utf-8-sig', newline='') as csv_file:  # utf-8-sig：Excel 開啟不亂碼
+        writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
+        writer.writeheader()
+        writer.writerows(rows)
+
+
+def run_report_missing(posts_path, write_csv):
+    posts = parse_posts_source(posts_path.read_text(encoding='utf-8'))
+    rows = missing_coordinate_rows(posts)
+    for row in rows:
+        print(format_report_row(row))
+    not_found = sum(row['reason'] == REASON_NOT_FOUND for row in rows)
+    print(f'\n共 {len(posts)} 篇，{len(rows)} 篇不在地圖上（{REASON_NOT_FOUND} {not_found}、{REASON_NO_ADDRESS} {len(rows) - not_found}）')
+    print('補法：把該篇的 map: 換成 Google 地圖「分享」連結（maps.app.goo.gl），再執行 --backfill')
+    if write_csv:
+        write_report_csv(rows, REPORT_CSV_PATH)
+        print(f'已輸出 {REPORT_CSV_PATH}')
+    return 0
+
+
 def main(argv=None):
     parser = argparse.ArgumentParser(description='批次匯入 IG 食記到 posts.js')
     parser.add_argument('--posts', type=Path, default=DEFAULT_POSTS_PATH, help='posts.js 路徑')
@@ -469,10 +587,14 @@ def main(argv=None):
     parser.add_argument('--no-geocode', action='store_true', help='不連網查詢座標')
     parser.add_argument('--from-instagram', action='store_true', help='從 IG 官方 API 抓取自己帳號的所有貼文')
     parser.add_argument('--limit', type=int, default=None, help='搭配 --from-instagram：最多抓幾篇（新到舊）')
+    parser.add_argument('--report-missing', action='store_true', help='列出不會出現在地圖上的文章（只讀）')
+    parser.add_argument('--csv', action='store_true', help='搭配 --report-missing：另存 tools/missing_coordinates.csv')
     args = parser.parse_args(argv)
 
     if hasattr(sys.stdout, 'reconfigure'):
         sys.stdout.reconfigure(encoding='utf-8')
+    if args.report_missing:
+        return run_report_missing(args.posts, args.csv)
     if args.backfill:
         return run_backfill(args.posts, args.dry_run)
     if args.from_instagram:
