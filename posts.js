@@ -8446,7 +8446,7 @@ chill的午後時光🏖🏖
 #懶懶花吃台北 #台北美食 #台北 #taipei #台灣美食 #台湾 #台北景點 #台北中正區 #taiwan #chinesefood #台北地下街 #台北車站 #北車`
         },
         {
-            region: '台中 Taichung',
+            region: '開箱 Unboxing',
             permalink: 'https://www.instagram.com/p/C5QeoQwrQOv/',
             date: '2024-04-02',
             map: '',
@@ -8693,7 +8693,7 @@ chill的午後時光🏖🏖
 #懶懶花吃台中 #台中美食 #台中 #taichung #台灣美食 #台湾 #台中景點 #台中西屯 #西屯美食 #taiwan #chinesefood #台中新光三越 #台中大遠百 #台中甜點 #台中甜點店 #日式甜點 #和菓子 #甜點 #dessert #スイーツ #デザート`
         },
         {
-            region: '台中 Taichung',
+            region: '開箱 Unboxing',
             permalink: 'https://www.instagram.com/p/C6DQnSOP72R/',
             date: '2024-04-22',
             map: '',
@@ -8797,7 +8797,9 @@ chill的午後時光🏖🏖
             region: '台北 Taipei',
             permalink: 'https://www.instagram.com/p/C6QfAi0Lc70/',
             date: '2024-04-27',
-            map: 'https://www.google.com/maps/search/?api=1&query=%E9%BE%9C%E8%A8%98%20%E5%85%A8%E5%8F%B0%E9%BE%9C%E8%A8%98%E9%96%80%E5%B8%82',
+            map: 'https://maps.app.goo.gl/ukQhgYfHMEV6AkTD7',
+            lat: 24.165156,
+            lng: 120.636422,
             content: `✨️#龜記
 
 🍽珍珠奶茶／$55
@@ -8884,7 +8886,9 @@ chill的午後時光🏖🏖
             region: '日本 Japan',
             permalink: 'https://www.instagram.com/reel/C6igCERvhVA/',
             date: '2024-05-04',
-            map: '',
+            map: 'https://maps.app.goo.gl/Uant9pNM5UX3tM4h7',
+            lat: 42.779132,
+            lng: 141.686636,
             content: `✨️#北海道
 
 🍽六花亭 酒糖 60入／¥850
@@ -10452,10 +10456,12 @@ BBQ雞肉薄片披薩／$259
 #懶懶花吃台中 #台中美食 #台中 #taichung #台灣美食 #台湾 #台中景點 #台中中區 #中區美食 #台中甜點 #泰式料理 #taiwan #thaifood #グルメ #台湾グルメ #タイ料理 #たいちゅう #吉伊卡哇 #chiikawa  #ちいかわ #buburchacha #bobochacha #momochacha #อาหารไทย`
         },
         {
-            region: '台北 Taipei',
+            region: '台中 Taichung',
             permalink: 'https://www.instagram.com/p/DBK47M5zp34/',
             date: '2024-10-16',
-            map: 'https://www.google.com/maps/search/?api=1&query=%E9%B6%B4%E8%8C%B6%E6%A8%93%20%E5%85%A8%E5%8F%B0%E9%B6%B4%E8%8C%B6%E6%A8%93%E9%96%80%E5%B8%82',
+            map: 'https://maps.app.goo.gl/GRaZGy9KqRffKcALA',
+            lat: 24.159732,
+            lng: 120.638472,
             content: `✨️#鶴茶樓
 
 🍽鶴記芝麻糊凍鶴頂那堤／$80
@@ -10800,7 +10806,7 @@ CP值跟本爆表！😍
 #懶懶花吃台中 #台中美食 #台中 #taichung #台灣美食 #台湾 #台湾グルメ #グルメ #台中景點 #台中清水 #taiwan #甜點 #dessert #スイーツ #デザート #冰淇淋 #icecream #アイスクリーム #ソフトクリーム #ソフト #優惠活動 #新店報報`
         },
         {
-            region: '台中 Taichung',
+            region: '開箱 Unboxing',
             permalink: 'https://www.instagram.com/p/DDn-mc_PUfD/',
             date: '2024-12-16',
             map: '',
@@ -10888,7 +10894,7 @@ CP值跟本爆表！😍
 #懶懶花吃宅配美食 #宅配美食 #台灣美食 #台湾 #taiwan #コヒー #coffee #咖啡 #UCC #職人咖啡 #日本台灣銷售第一 #獻給值得的人`
         },
         {
-            region: '台中 Taichung',
+            region: '澳洲 Australia',
             permalink: 'https://www.instagram.com/reel/DEERiydzQD3/',
             date: '2024-12-27',
             map: '',
@@ -11308,7 +11314,9 @@ HAPPY NEW YEAR!!
             region: '台北 Taipei',
             permalink: 'https://www.instagram.com/reel/DGDdYPgv-yK/',
             date: '2025-02-14',
-            map: 'https://www.google.com/maps/search/?api=1&query=%E8%91%A3%E5%B8%AB%E5%82%85%E6%89%8B%E5%B7%A5%E9%BA%BB%E7%B3%AC%20%E6%9D%BF%E6%A9%8B%E8%BB%8A%E7%AB%99B1%E7%BE%8E%E9%A3%9F%E8%A1%97',
+            map: 'https://maps.app.goo.gl/qtLLQ3uEq8RGcgRf7',
+            lat: 25.013815,
+            lng: 121.467044,
             content: `✨️#董師傅手工麻糬
 
 🍽紅豆草莓大福／$58
@@ -11608,7 +11616,9 @@ $160起自助吧吃到飽‼️
             region: '嘉義 Chiayi',
             permalink: 'https://www.instagram.com/p/DHm3ij9TOs9/',
             date: '2025-03-25',
-            map: 'https://www.google.com/maps/search/?api=1&query=%E9%AB%98%E8%88%88%E7%B4%85%E8%B1%86%E6%B9%AF%20%E5%98%89%E7%BE%A9%E5%B8%82%E8%A5%BF%E5%8D%80%E4%B8%AD%E5%A4%AE%E7%AC%AC%E4%B8%80%E5%95%86%E5%A0%B482%E8%99%9F',
+            map: 'https://maps.app.goo.gl/iDLJv7DAedFvpDMD8',
+            lat: 23.479216,
+            lng: 120.449229,
             content: `✨️#高興紅豆湯
 
 🍽梅檸冰茶／$40
@@ -11812,7 +11822,9 @@ IG：@o.shop_417
             region: '日本 Japan',
             permalink: 'https://www.instagram.com/p/DKzMoMdznD2/',
             date: '2025-06-12',
-            map: 'https://www.google.com/maps/search/?api=1&query=%E5%90%8D%E4%BB%A3%E5%AF%8C%E5%A3%AB%E8%95%8E%E9%BA%A5%E9%BA%B5%20%E6%9D%B1%E4%BA%AC%E9%83%BD%E8%91%9B%E9%A3%BE%E5%8C%BA%E6%96%B0%E5%B0%8F%E5%B2%A91%E4%B8%81%E7%9B%AE48-2',
+            map: 'https://maps.app.goo.gl/oKYvFgomkfwFdBReA',
+            lat: 35.716025,
+            lng: 139.859311,
             content: `✨️#名代富士蕎麥麵
 #名代富士そば 新小岩南口店
 
@@ -11942,7 +11954,9 @@ https://maps.app.goo.gl/SUhDbs3cwS8FKXY77
             region: '日本 Japan',
             permalink: 'https://www.instagram.com/reel/DLHC_AYTs_B/',
             date: '2025-06-20',
-            map: 'https://www.google.com/maps/search/?api=1&query=cheese%E2%80%99n%20Tokyo%20%E6%97%A5%E6%9C%AC%E6%9D%B1%E4%BA%AC%E9%83%BD%E8%91%9B%E9%A3%BE%E5%8D%80%E6%9D%B1%E6%96%B0%E5%B0%8F%E5%B2%A9%E4%BA%94%E4%B8%81%E7%9B%AE1-10',
+            map: 'https://maps.app.goo.gl/etsssAWCnbxck1x28',
+            lat: 35.720045,
+            lng: 139.857237,
             content: `✨️#cheese’n Tokyo
 
 🍽燉牛肉Cheese’n+法國麵包+美酢氣泡飲／¥1800
@@ -12018,7 +12032,9 @@ $258+10%爆吃一波🔥
             region: '日本 Japan',
             permalink: 'https://www.instagram.com/p/DLWfxbTTkSu/',
             date: '2025-06-26',
-            map: 'https://www.google.com/maps/search/?api=1&query=SOBAP%20%E6%9D%B1%E4%BA%AC%E9%83%BD%E5%8D%83%E4%BB%A3%E7%94%B0%E5%8D%80%E4%B8%B8%E4%B9%8B%E5%85%A71-9-1',
+            map: 'https://maps.app.goo.gl/P3QCsDXAk8nj6Dtn7',
+            lat: 35.681999,
+            lng: 139.766454,
             content: `✨️#SOBAP
 
 🍽巧克力可麗餅／¥320
@@ -12053,7 +12069,9 @@ JR東京站 丸之內北口改札內
             region: '日本 Japan',
             permalink: 'https://www.instagram.com/reel/DLWfqowTJJ4/',
             date: '2025-06-27',
-            map: 'https://www.google.com/maps/search/?api=1&query=Once%20upon%20a%20time%20%E6%97%A5%E6%9C%AC%20Chiba%2C%20Funabashi%2C%20Honcho%2C%205%20Chome%E2%88%922%E2%88%9220%20%E8%88%88%E5%92%8C%E7%AC%AC6%E3%83%93%E3%83%AB%202%E9%9A%8E',
+            map: 'https://maps.app.goo.gl/gLUPy3Coat651v4F6',
+            lat: 35.701911,
+            lng: 139.987216,
             content: `✨️#Once upon a time
 
 🍽丹麥式開放三明治（烤牛肉口味） ¥1720
@@ -12283,7 +12301,9 @@ Kenty踩點＋歐式餐點
             region: '嘉義 Chiayi',
             permalink: 'https://www.instagram.com/p/DMXt58UT1yE/',
             date: '2025-07-20',
-            map: 'https://www.google.com/maps/search/?api=1&query=%E8%93%8B%E5%A9%AD%E8%8E%8A%E5%9C%92%20%E5%98%89%E7%BE%A9%E7%B8%A3%E5%A4%A7%E6%9E%97%E9%8E%AE%E5%A4%A7%E5%9F%94%E7%BE%8E%E5%9C%92%E5%8D%80%E4%B8%83%E8%B7%AF18%E8%99%9F',
+            map: 'https://maps.app.goo.gl/JjELhqMEuNywaseZ8',
+            lat: 23.592272,
+            lng: 120.524284,
             content: `✨️#蓋婭莊園
 
 🏡地址：嘉義縣大林鎮大埔美園區七路18號
@@ -12439,7 +12459,9 @@ CP值真的很可以💯💯
             region: '台中 Taichung',
             permalink: 'https://www.instagram.com/p/DNDclFZzBqN/',
             date: '2025-08-07',
-            map: 'https://www.google.com/maps/search/?api=1&query=7ELEVEN%20%E5%85%A8%E5%8F%B0%207-11%20%E9%96%80%E5%B8%82',
+            map: 'https://maps.app.goo.gl/jSeDAY5k4spU7uqj8',
+            lat: 24.276762,
+            lng: 120.566538,
             content: `✨️#7ELEVEN
 
 🍽 醬燒里肌鲜蔬三明治／$69
@@ -13337,7 +13359,7 @@ Happy New Year 🎆
 #懶懶花吃台中 #台中美食 #台中早午餐`
         },
         {
-            region: '台中 Taichung',
+            region: '開箱 Unboxing',
             permalink: 'https://www.instagram.com/reel/DWflvhtPt62/',
             date: '2026-03-29',
             map: '',
@@ -13494,7 +13516,7 @@ Happy New Year 🎆
 #懶懶花吃台北 #台北美食 #南港美食 #日式定食`
         },
         {
-            region: '台中 Taichung',
+            region: '開箱 Unboxing',
             permalink: 'https://www.instagram.com/reel/DXWLCyGBMvv/',
             date: '2026-04-19',
             map: '',
@@ -13588,7 +13610,9 @@ Happy New Year 🎆
             region: '台中 Taichung',
             permalink: 'https://www.instagram.com/reel/DXi-9spvFMw/',
             date: '2026-04-25',
-            map: 'https://www.google.com/maps/search/?api=1&query=%E5%8D%9A%E5%A4%9A%E5%85%83%E6%B0%A3%E4%B8%80%E6%9D%AF%21%21%20%E7%A6%8F%E5%B2%A1%E7%B8%A3%E7%A6%8F%E5%B2%A1%E5%B8%82%E5%8D%9A%E5%A4%9A%E5%8D%80%E4%B8%8B%E5%90%B3%E6%9C%8D%E7%94%BA4-31%E2%88%921',
+            map: 'https://maps.app.goo.gl/Vw8VsTgziBRHR98Z6',
+            lat: 33.600831,
+            lng: 130.407344,
             content: `✨️#博多元氣一杯!!
 
 🍽叉燒拉麵 (叉燒增量)／¥1,400
@@ -13615,7 +13639,7 @@ Happy New Year 🎆
 #花現福岡 #福岡美食 #山田涼介 #聖地巡禮`
         },
         {
-            region: '台中 Taichung',
+            region: '開箱 Unboxing',
             permalink: 'https://www.instagram.com/reel/DXwa9U6vyu8/',
             date: '2026-04-30',
             map: '',
@@ -13687,7 +13711,9 @@ Happy New Year 🎆
             region: '日本 Japan',
             permalink: 'https://www.instagram.com/reel/DYGfxnbyA5M/',
             date: '2026-05-09',
-            map: 'https://www.google.com/maps/search/?api=1&query=%E7%86%9F%E8%B1%9A%E4%B8%89%E4%BB%A3%E7%9B%AE%E8%94%B5%E5%8F%B8%20%E6%9D%B1%E4%BA%AC%E9%83%BD%E6%B8%AF%E5%8D%80%E8%B5%A4%E5%9D%824%E4%B8%81%E7%9B%AE2%E2%88%922',
+            map: 'https://maps.app.goo.gl/ZzH8GLdrvbiifGJG8',
+            lat: 35.676115,
+            lng: 139.735691,
             content: `✨️#熟豚三代目蔵司
 
 🍽里肌炸豬排定食／日幣1375
@@ -13753,7 +13779,9 @@ Happy New Year 🎆
             region: '嘉義 Chiayi',
             permalink: 'https://www.instagram.com/p/DYZeykfEz6w/',
             date: '2026-05-16',
-            map: 'https://www.google.com/maps/search/?api=1&query=Matcha%20Prince%E8%8C%B6%E8%8C%B6%E7%8E%8B%E5%9B%BD%E3%81%AE%E3%81%8A%E3%81%86%E3%81%98%E3%81%A1%E3%82%83%E3%81%BE%20X%20%E5%AE%B6%E6%A8%82%E7%A6%8F%E5%BD%B1%E9%9F%BF%E5%8A%9B%E6%A6%82%E5%BF%B5%E5%BA%97%28%E6%95%85%E5%AE%AE%E5%8D%97%E9%99%A2%E8%81%AF%E5%90%8D%E5%BA%97%29%20%E5%98%89%E7%BE%A9%E6%95%85%E5%AE%AE%E5%8D%97%E9%99%A21%E9%A4%A8%E5%85%A7',
+            map: 'https://maps.app.goo.gl/PYmXpBJGrA3xB6z58',
+            lat: 23.473182,
+            lng: 120.292932,
             content: `✨️#Matcha Prince茶茶王国のおうじちゃま X 家樂福影響力概念店(故宮南院聯名店)
 
 🍽濃厚奶蓋三色凍／$80
@@ -13777,7 +13805,9 @@ Happy New Year 🎆
             region: '日本 Japan',
             permalink: 'https://www.instagram.com/reel/DYmtiBfTuT1/',
             date: '2026-05-21',
-            map: 'https://www.google.com/maps/search/?api=1&query=dac%C5%8D%EF%BC%9F%E7%A5%9E%E6%A8%82%E5%9D%82%20%E6%9D%B1%E4%BA%AC%E9%83%BD%E6%96%B0%E5%AE%BF%E5%8D%80%E7%A5%9E%E6%A8%82%E5%9D%82%EF%BC%96%E4%B8%81%E7%9B%AE67-1%201F',
+            map: 'https://maps.app.goo.gl/7WuTDAU2J5N7MkCU6',
+            lat: 35.702708,
+            lng: 139.737206,
             content: `✨️#dacō？神樂坂
 
 🍽拿坡里甜甜圈／270円
@@ -13836,7 +13866,9 @@ Kenty同款 拿坡里甜甜圈💙
             region: '日本 Japan',
             permalink: 'https://www.instagram.com/reel/DY_7kRaTQKp/',
             date: '2026-05-31',
-            map: 'https://www.google.com/maps/search/?api=1&query=%E7%AB%B9%E4%B9%8B%E5%AD%90%20%E6%96%87%E5%AD%97%E7%87%92%20%E6%9D%B1%E4%BA%AC%E9%83%BD%E4%B8%AD%E5%A4%AE%E5%8D%80%E6%9C%88%E5%B3%B61%E4%B8%81%E7%9B%AE9%E2%88%9215',
+            map: 'https://maps.app.goo.gl/7pK5TwhNzQ1hLYwx5',
+            lat: 35.664856,
+            lng: 139.782983,
             content: `✨️#竹之子 文字燒
 
 🍽特製燉牛肉文字燒／¥1550
@@ -13862,42 +13894,6 @@ Kenty同款 拿坡里甜甜圈💙
 サイコッチョー ！ 🍻
 
 #花現東京 #東京美食 #亀梨和也 #文字燒`
-        },
-        {
-            region: '台北 Taipei',
-            permalink: 'https://www.instagram.com/reel/DZxXDo7zf8K/',
-            date: '2026-06-19',
-            map: 'https://www.google.com/maps/search/?api=1&query=%E5%96%9C%E6%86%A8%E5%85%92ENJOY%20%E8%87%BA%E5%8C%97%E9%A4%90%E5%BB%B3%20%E8%87%BA%E5%8C%97%E5%B8%82%E4%BF%A1%E7%BE%A9%E5%8D%80%E5%B8%82%E5%BA%9C%E8%B7%AF1%E8%99%9F1%E6%A8%93%E5%8D%97%E5%8D%80%E9%80%9A%E5%BB%8A',
-            lat: 25.040095,
-            lng: 121.563810,
-            content: `✨️#喜憨兒ENJOY 臺北餐廳
-
-🍽波隆那肉醬番茄義大利麵+黃金香柚／$250
-奶油火腿燻雞義大利麵+藍莓果粒茶／$250
-
-🏡地址：臺北市信義區市府路1號1樓南區通廊
-🕑營業時間：08:00～18:00
-(例假日、國定假日固定公休)
-☎️電話：02 2720 5208
-
-✏️在台北市政府吃一餐🍽️
-喜憨兒餐廳250元套餐開箱～
-一般民眾也可以自由用餐
-
-只要250元‼️
-就有義大利麵、餐包、飲料、玉米湯、甜點
-主餐的醬汁很濃郁
-但對我來說稍微偏鹹
-玉米湯清淡一些
-咖啡凍冰冰涼涼、Q彈好吃😚
-餐點不是走精緻路線
-但服務非常親切💯
-小鳥胃吃完整個超飽！
-
-平價又有溫度🌞
-吃完心情也很好❤️
-
-#懶懶花吃台北 #台北美食 #信義美食 #台北餐廳`
         },
         {
             region: '台北 Taipei',
@@ -13937,34 +13933,6 @@ Kenty同款 拿坡里甜甜圈💙
         },
         {
             region: '台北 Taipei',
-            permalink: 'https://www.instagram.com/reel/DZ7ecj6ho7r/',
-            date: '2026-06-23',
-            map: 'https://www.google.com/maps/search/?api=1&query=%E6%98%A5%E7%BE%8E%E5%86%B0%E8%8F%93%E5%AE%A4%20%E8%87%BA%E5%8C%97%E5%B8%82%E6%9D%BE%E5%B1%B1%E5%8D%80%E4%B8%AD%E6%AD%A3%E9%87%8C%E6%95%A6%E5%8C%96%E5%8C%97%E8%B7%AF120%E5%B7%B754%E8%99%9F',
-            lat: 25.049938,
-            lng: 121.548690,
-            content: `✨️#春美冰菓室
-
-🍽芒果牛奶雪花冰／$220
-
-🏡地址：臺北市松山區中正里敦化北路120巷54號
-🕑營業時間：12:00～21:00
-☎️電話：02 2712 9186
-
-✏️夏季限定芒果冰🍧
-芒果超大塊又新鮮！
-淋滿濃郁芒果醬
-一碗$220 份量不會太多
-客滿時要先掃碼候位
-再到對面公園等待🏞
-
-夏天就是要來一碗🥭
-繼續收集芒果冰名單～～
-歡迎留言推薦給我❤️
-
-#懶懶花吃台北 #台北美食 #松山美食 #台北冰品`
-        },
-        {
-            region: '台北 Taipei',
             permalink: 'https://www.instagram.com/reel/DZ7dTyTBPSp/',
             date: '2026-06-23',
             map: 'https://www.google.com/maps/search/?api=1&query=%E6%98%A5%E7%BE%8E%E5%86%B0%E8%8F%93%E5%AE%A4%20%E8%87%BA%E5%8C%97%E5%B8%82%E6%9D%BE%E5%B1%B1%E5%8D%80%E4%B8%AD%E6%AD%A3%E9%87%8C%E6%95%A6%E5%8C%96%E5%8C%97%E8%B7%AF120%E5%B7%B754%E8%99%9F',
@@ -13995,7 +13963,9 @@ Kenty同款 拿坡里甜甜圈💙
             region: '埃及 Egypt',
             permalink: 'https://www.instagram.com/reel/DaAia5YyU8T/',
             date: '2026-06-25',
-            map: 'https://www.google.com/maps/search/?api=1&query=KosharyAbouTarek%20%D9%A1%D9%A6%20Marouf%2C%20Qasr%20El%20Nil%2C%20Cairo%20Governorate%204272135%E5%9F%83%E5%8F%8A',
+            map: 'https://maps.app.goo.gl/AnDJxZqiJTVuD63y6',
+            lat: 30.050153,
+            lng: 31.237834,
             content: `✨️#KosharyAbouTarek
 
 🍽庫莎麗／65埃鎊
@@ -14023,34 +13993,6 @@ Kenty同款 拿坡里甜甜圈💙
         {
             region: '台中 Taichung',
             permalink: 'https://www.instagram.com/reel/DaNbV-ePiBM/',
-            date: '2026-06-30',
-            map: '',
-            content: `在埃及搭Indrive
-司機說這些都很好吃
-跟著當地人推薦一路吃吃喝喝🤤
-
-📌 El Hamra Street Restaurant
-優酪乳偏水
-沙威瑪偏乾
-還是比較喜歡台灣的口味😅
-
-📌 Smoothie Paradise
-草莓奶昔像草莓果醬冰沙
-甜但沒有特別記憶點
-
-📌 Al Malki（المالكى）
-這間甜點店我最喜歡👍👍
-藍莓優格＋檸檬冰淇淋很驚喜🍨
-口感是沙沙的雪酪感～
-不過店員不太會英文
-也沒有菜單
-點餐全靠比手畫腳🤣
-
-#花現埃及 #埃及美食 #開羅美食 #egypt #kairo`
-        },
-        {
-            region: '台中 Taichung',
-            permalink: 'https://www.instagram.com/reel/DaNYgimzT9P/',
             date: '2026-06-30',
             map: '',
             content: `在埃及搭Indrive
@@ -14106,7 +14048,7 @@ IG：https://www.instagram.com/monbanatw/
 #好市多必買 #MONBANA #法蘭酥 #法國巧克力第一品牌 #全素零食`
         },
         {
-            region: '台中 Taichung',
+            region: '開箱 Unboxing',
             permalink: 'https://www.instagram.com/reel/DaenA6Pztx7/',
             date: '2026-07-07',
             map: '',
@@ -14172,7 +14114,7 @@ IG：https://www.instagram.com/monbanatw/
 #梧棲美食 #台中伴手禮 #台中十大伴手禮 #打卡奶酥`
         },
         {
-            region: '台中 Taichung',
+            region: '埃及 Egypt',
             permalink: 'https://www.instagram.com/reel/DawNQvtTtRp/',
             date: '2026-07-14',
             map: '',
@@ -14206,41 +14148,7 @@ Jordi 1樓也有分店
 #花現埃及 #埃及美食 #egypt #埃及景點`
         },
         {
-            region: '台中 Taichung',
-            permalink: 'https://www.instagram.com/reel/DaxbLCwTUK9/',
-            date: '2026-07-14',
-            map: '',
-            content: `✨️#哈利利市集
-
-I人逛哈利利市集
-甜點＆明碼標價紀念品店
-
-似乎是中東傳統甜點「庫納法Knafeh」
-裹上金黃酥脆細絲，再淋滿糖漿
-螞蟻人會愛💥
-
-看到 CAMEL BAZAR 招牌後
-沿著樓梯到2樓
-這裡有許多人推薦的紀念品店🛍
-對不太會殺價的I人很友善
-
-會經過一家有各式包包、衣服
-也是明碼標價的小店
-帆布袋比我在別家殺價完的還便宜🥹
-
-來逛許多人推薦的 Jordi Bazar Shop
-紀念品種類很多
-像這組金字塔擺飾，印象中不到30埃鎊💥
-Jordi 1樓也有分店
-但商品種類少很多～
-
-品質不用期待太高
-就當是旅行的小紀念🤎
-
-#花現埃及 #埃及美食 #egypt #埃及景點`
-        },
-        {
-            region: '台中 Taichung',
+            region: '開箱 Unboxing',
             permalink: 'https://www.instagram.com/p/Da-dldLk56Z/',
             date: '2026-07-19',
             map: '',
@@ -14272,7 +14180,9 @@ Jordi 1樓也有分店
             region: '台中 Taichung',
             permalink: 'https://www.instagram.com/reel/DbN7TFGzaLw/',
             date: '2026-07-25',
-            map: 'https://www.google.com/maps/search/?api=1&query=MisterDonuts%20%E5%85%A8%E5%8F%B0Mister%20Donuts%20%EF%BC%8F%207-ELEVEN%20Mister%20Donut%E5%B0%88%E6%AB%83',
+            map: 'https://maps.app.goo.gl/rCrDRAvGFLQzJgXa7',
+            lat: 24.267358,
+            lng: 120.574929,
             content: `✨️#MisterDonuts
 
 🍽豆香萌奇圈／$55
@@ -14298,24 +14208,6 @@ Jordi 1樓也有分店
         },
         {
             region: '台中 Taichung',
-            permalink: 'https://www.instagram.com/reel/Dbme7hOzl3d/',
-            date: '2026-08-04',
-            map: '',
-            content: `尼羅河畔餐廳
-美景配透心涼河風
-
-蕃茄湯鹹香好喝🍅
-其他吃不懂😅
-烤肉、炸物都超乾
-夜景是真的很漂亮🎆🎆
-12月中去的時候風蠻強的
-路克索神廟就在附近
-很適合順道走走～
-
-#花現埃及 #egypt #埃及景點 #路克索 #luxor`
-        },
-        {
-            region: '台中 Taichung',
             permalink: 'https://www.instagram.com/reel/DbmQzmMBjks/',
             date: '2026-08-04',
             map: '',
@@ -14331,23 +14223,6 @@ Jordi 1樓也有分店
 很適合順道走走～
 
 #花現埃及 #egypt #埃及景點 #路克索 #luxor`
-        },
-        {
-            region: '台中 Taichung',
-            permalink: 'https://www.instagram.com/reel/DbvQSQRzhHk/',
-            date: '2026-08-07',
-            map: '',
-            content: `♔ 𓄂𓆃
-天哪 金字塔、天哪 神廟🤩
-
-雖然很多人都認為埃及去過一次就好
-我應該也是😜
-但真的值得去一次～
-有很多風景、新奇的體驗、人文風情
-沒親身經歷是無法體會的
-這一趟收穫了許多很難得的回憶🇪🇬🏜️☀️🐫🌵
-
-#花現埃及 #egypt #埃及景點`
         },
         {
             region: '台中 Taichung',
@@ -14367,7 +14242,7 @@ Jordi 1樓也有分店
 #花現埃及 #egypt #埃及景點`
         },
         {
-            region: '台中 Taichung',
+            region: '開箱 Unboxing',
             permalink: 'https://www.instagram.com/reel/DbzvqLjh7BB/',
             date: '2026-08-09',
             map: '',
@@ -14421,7 +14296,7 @@ Jordi 1樓也有分店
 #懶懶花吃台中 #台中美食 #清水美食 #台中餐廳`
         },
         {
-            region: '台中 Taichung',
+            region: '開箱 Unboxing',
             permalink: 'https://www.instagram.com/reel/Db-DXbtTzwF/',
             date: '2026-08-13',
             map: 'https://www.google.com/maps/search/?api=1&query=%E9%98%BF%E5%A5%87%E5%84%82%20%E5%85%A8%E5%8F%B0%E5%85%A8%E5%AE%B6',
@@ -14482,7 +14357,7 @@ Jordi 1樓也有分店
 #懶懶花吃台中 #台中美食 #清水美食`
         },
         {
-            region: '台中 Taichung',
+            region: '開箱 Unboxing',
             permalink: 'https://www.instagram.com/reel/DcLQ_Njz6p1/',
             date: '2026-08-18',
             map: '',
@@ -14542,38 +14417,6 @@ Jordi 1樓也有分店
         },
         {
             region: '台中 Taichung',
-            permalink: 'https://www.instagram.com/reel/DccpFX-TDAA/',
-            date: '2026-08-25',
-            map: 'https://www.google.com/maps/search/?api=1&query=%E9%9C%A7%E5%B3%B0%E5%8D%80%E8%BE%B2%E6%9C%83%E9%BB%91%E7%BF%85%E9%B3%B6%E9%BA%B5%E9%A3%9F%E9%A4%A8%20%E8%87%BA%E4%B8%AD%E5%B8%82%E9%9C%A7%E5%B3%B0%E5%8D%80%E5%85%AD%E8%82%A1%E9%87%8C%E4%B8%AD%E6%AD%A3%E8%B7%AF369%E8%99%9F',
-            lat: 24.073967,
-            lng: 120.699876,
-            content: `✨️#霧峰區農會黑翅鳶麵食館
-
-🍽豪華叉燒蔬菜黑翅鴦麵／$165
-升級套餐(小菜+飲料+甜品)／+$80
-
-🏡地址：臺中市霧峰區六股里中正路369號
-🕑營業時間：11:00~16:00(週一公休)
-☎️電話：04 2339 1556
-
-✏️融入霧峰香米的黑翅鳶麵 🌾
-老診所化身麵食館 
-點了許多人推的豪華叉燒蔬菜黑翅鳶麵 🍜
-沒有過多調味
-保留蔬菜與菇菇最原始的鮮甜～～
-滿滿一碗非常澎湃！
-升級套餐，吃完好滿足 😋
-
-2樓是民生故事館，免費參觀～
-探索歷史與食農文化
-用一碗麵與一段故事
-重新亮起了這棟老宅的燈火 💡
-假日不妨到這排個文青半日遊吧！
-
-#懶懶花吃台中 #台中美食 #霧峰美食`
-        },
-        {
-            region: '台中 Taichung',
             permalink: 'https://www.instagram.com/reel/DccsXCvB_7J/',
             date: '2026-08-25',
             map: 'https://www.google.com/maps/search/?api=1&query=%E9%9C%A7%E5%B3%B0%E5%8D%80%E8%BE%B2%E6%9C%83%E9%BB%91%E7%BF%85%E9%B3%B6%E9%BA%B5%E9%A3%9F%E9%A4%A8%20%E8%87%BA%E4%B8%AD%E5%B8%82%E9%9C%A7%E5%B3%B0%E5%8D%80%E5%85%AD%E8%82%A1%E9%87%8C%E4%B8%AD%E6%AD%A3%E8%B7%AF369%E8%99%9F',
@@ -14605,7 +14448,7 @@ Jordi 1樓也有分店
 #懶懶花吃台中 #台中美食 #霧峰美食`
         },
         {
-            region: '台中 Taichung',
+            region: '開箱 Unboxing',
             permalink: 'https://www.instagram.com/reel/DchylsKzf7S/',
             date: '2026-08-27',
             map: '',
@@ -14630,35 +14473,6 @@ Jordi 1樓也有分店
 把握時間替冷凍庫補貨囉🧊
 
 #懶懶花吃台中 #全家 #冰品 #買一送一`
-        },
-        {
-            region: '台中 Taichung',
-            permalink: 'https://www.instagram.com/reel/DcyLEhSzBQJ/',
-            date: '2026-09-02',
-            map: 'https://www.google.com/maps/search/?api=1&query=%E9%B8%9E%E9%B3%B3%E8%B6%8A%E5%8D%97%E5%B0%8F%E5%90%83%20%E5%8F%B0%E4%B8%AD%E5%B8%82%E6%A2%A7%E6%A3%B2%E5%8D%80%E4%B8%AD%E5%A4%AE%E8%B7%AF%E4%BA%8C%E6%AE%B5211%E8%99%9F',
-            lat: 24.256416,
-            lng: 120.541093,
-            content: `✨️#鸞鳳越南小吃
-
-🍽招牌牛肉河粉 小份／$110
-煉乳咖啡／$60
-
-🏡地址：台中市梧棲區中央路二段211號
-🕑營業時間：07:00～19:00(週二公休)
-☎️電話：04 2657 5009
-
-✏️梧棲平價越南小吃💫
-牛肉河粉好大碗
-可以兩人分食，再加點小樣的～
-湯頭偏重口味、吃多容易口渴
-味道算是相當道地☺️
-
-煉乳咖啡很多人說太甜
-但我覺得還好（可能我是螞蟻人🤣🤣）
-依然喝得到咖啡苦香☕️
-想吃越南小吃的時候可以去！
-
-#懶懶花吃台中 #台中美食 #梧棲美食 #越南河粉`
         },
         {
             region: '台中 Taichung',
@@ -14813,35 +14627,6 @@ Brunch Brother 保冷箱超可愛！
 梧棲漁港 門口右邊
 
 #懶懶花吃台中 #台中美食 #清水美食`
-        },
-        {
-            region: '台中 Taichung',
-            permalink: 'https://www.instagram.com/reel/Des6JeJz6x-/',
-            date: '2026-10-20',
-            map: 'https://www.google.com/maps/search/?api=1&query=%E2%9C%8F%EF%B8%8F%E4%BB%8A%E5%A4%A9%E4%BE%86%E5%90%83%E5%8E%9A%E5%88%87%E9%BB%91%E8%9C%9C%E8%85%B0%E5%85%A7%E8%B1%AC%E6%8E%92%20%E8%87%BA%E4%B8%AD%E5%B8%82%E6%A2%A7%E6%A3%B2%E5%8D%80%E5%AE%89%E4%BB%81%E9%87%8C%E8%87%BA%E7%81%A3%E5%A4%A7%E9%81%93%E5%8D%81%E6%AE%B5168%E8%99%9F2%E6%A8%93%28MITSUI%20OUTLET%20PARK%20%E5%8F%B0%E4%B8%AD%E6%B8%AF%20%E5%85%A7%29',
-            lat: 24.255219,
-            lng: 120.522236,
-            content: `✏️今天來吃厚切黑蜜腰內豬排
-外皮酥酥脆脆🐷
-喜歡瘦肉的人可以點這個
-味噌湯滿滿都是吸飽湯汁的豆皮🥰
-
-湯、白飯、小菜、高麗菜絲無限續👍
-最後用水信玄餅畫下句點
-一整套吃下來很滿足
-是那種吃得飽飽
-會想再回訪的店～
-
-✨️#晴木千層豬排
-
-🍽厚切黑蜜腰內豬排套餐／$580
-10%服務費另計
-
-🏡地址：臺中市梧棲區安仁里臺灣大道十段168號2樓(MITSUI OUTLET PARK 台中港 內)
-🕑營業時間：11:00～21:30
-☎️電話：04 2656 7996
-
-#懶懶花吃台中 #台中美食 #梧棲美食 #炸豬排`
         },
         {
             region: '台中 Taichung',
