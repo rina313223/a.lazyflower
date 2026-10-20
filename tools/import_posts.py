@@ -8,6 +8,8 @@
     python tools/import_posts.py --dry-run    # 只預覽，不寫檔
     python tools/import_posts.py --backfill   # 幫 posts.js 裡缺座標的舊文章補 lat/lng
     python tools/import_posts.py --no-geocode # 不連網查座標
+    python tools/import_posts.py --from-instagram           # 直接從 IG 官方 API 抓所有貼文（免貼 inbox）
+    python tools/import_posts.py --from-instagram --limit 5 # 只抓最新 5 篇（試跑用）
 
 inbox.txt 格式（多篇用一行 --- 分隔）：
     https://www.instagram.com/p/XXXXXXXX/
@@ -24,14 +26,16 @@ import re
 import shutil
 import sys
 import time
-from datetime import datetime, timezone, timedelta
+from datetime import datetime
 from pathlib import Path
+from urllib.parse import quote
 
 import requests
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(PROJECT_ROOT))
 from get_data import clean_instagram_url, extract_map_link, detect_region  # noqa: E402
+import instagram_api  # noqa: E402  （與本檔同在 tools/，執行時已在 sys.path）
 
 DEFAULT_POSTS_PATH = PROJECT_ROOT / 'posts.js'
 DEFAULT_INBOX_PATH = Path(__file__).resolve().parent / 'inbox.txt'
@@ -42,6 +46,7 @@ HEADER_PATTERN = re.compile(r'^(map|date|region)\s*[:：]\s*(.+)$', re.IGNORECAS
 COMMENT_PREFIX = '//'
 SHORTCODE_PATTERN = re.compile(r'instagram\.com/(?:[^/]+/)?(?:p|reel|tv)/([A-Za-z0-9_-]+)')
 ADDRESS_PATTERN = re.compile(r'地址[：:]\s*(.+)')
+GOOGLE_MAPS_SEARCH_URL = 'https://www.google.com/maps/search/?api=1&query='
 COORDINATE_PATTERNS = (
     re.compile(r'!3d(-?\d+\.\d+)!4d(-?\d+\.\d+)'),
     re.compile(r'@(-?\d+\.\d+),(-?\d+\.\d+)'),
@@ -50,7 +55,6 @@ COORDINATE_PATTERNS = (
 
 IG_SHORTCODE_ALPHABET = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_'
 IG_ID_EPOCH_MS = 1314220021721
-TAIPEI_TZ = timezone(timedelta(hours=8))
 
 CITY_TO_REGION = {
     '台北': '台北 Taipei', '新北': '新北 New Taipei', '桃園': '桃園 Taoyuan', '苗栗': '苗栗 Miaoli',
@@ -81,7 +85,7 @@ def estimate_date_from_shortcode(shortcode):
         media_id = media_id * 64 + IG_SHORTCODE_ALPHABET.index(ch)
     timestamp_ms = (media_id >> 23) + IG_ID_EPOCH_MS
     try:
-        return datetime.fromtimestamp(timestamp_ms / 1000, TAIPEI_TZ).strftime('%Y-%m-%d')
+        return datetime.fromtimestamp(timestamp_ms / 1000, instagram_api.TAIPEI_TZ).strftime('%Y-%m-%d')
     except (OverflowError, OSError, ValueError):
         return ''
 
@@ -99,6 +103,22 @@ def region_from_address(address, content):
     return detect_region(content or '')
 
 
+def build_entry(permalink, content, date='', region='', map_url=''):
+    """各來源（inbox、IG API）共用的 entry 組裝；未提供的欄位由內文推導。"""
+    permalink = clean_instagram_url(permalink)
+    shortcode = extract_shortcode(permalink)
+    address = extract_address(content)
+    return {
+        'permalink': permalink,
+        'shortcode': shortcode,
+        'date': date or estimate_date_from_shortcode(shortcode),
+        'region': region or region_from_address(address, content),
+        'map': map_url or extract_map_link(content),
+        'address': address,
+        'content': content,
+    }
+
+
 def parse_entry_block(block):
     lines = [line for line in block.strip('\n').split('\n') if not line.strip().startswith(COMMENT_PREFIX)]
     while lines and not lines[0].strip():
@@ -106,7 +126,6 @@ def parse_entry_block(block):
     if not lines or 'instagram.com' not in lines[0]:
         return None
 
-    permalink = clean_instagram_url(lines[0].strip())
     headers = {}
     body_start = 1
     for index in range(1, len(lines)):
@@ -118,16 +137,7 @@ def parse_entry_block(block):
         body_start = index + 1
 
     content = '\n'.join(lines[body_start:]).strip()
-    address = extract_address(content)
-    return {
-        'permalink': permalink,
-        'shortcode': extract_shortcode(permalink),
-        'date': headers.get('date') or estimate_date_from_shortcode(extract_shortcode(permalink)),
-        'region': headers.get('region') or region_from_address(address, content),
-        'map': headers.get('map') or extract_map_link(content),
-        'address': address,
-        'content': content,
-    }
+    return build_entry(lines[0].strip(), content, headers.get('date', ''), headers.get('region', ''), headers.get('map', ''))
 
 
 def parse_inbox(text):
@@ -330,17 +340,23 @@ def build_coordinate_finder(enable_geocode):
     return finder
 
 
-def run_import(posts_path, inbox_path, dry_run, enable_geocode):
-    if not inbox_path.exists():
-        inbox_path.write_text(INBOX_TEMPLATE, encoding='utf-8')
-        print(f'已建立 {inbox_path}，請貼上貼文後再執行一次。')
-        return 0
+def extract_title(content):
+    # 對應前端 js/postParser.js 的 extractTitle()，規則修改時請兩邊同步
+    first_line = next((line.strip() for line in (content or '').splitlines() if line.strip()), '')
+    names = [part.strip() for part in first_line.lstrip('✨️ ').split('#') if part.strip()]
+    return names[0] if names else first_line
 
-    entries = parse_inbox(inbox_path.read_text(encoding='utf-8'))
-    if not entries:
-        print('inbox.txt 裡沒有可匯入的貼文（第一行需要是 IG 網址）。')
-        return 0
 
+def build_map_search_url(content, address):
+    """沒有 Google 地圖分享連結時，用「店名 地址」產生搜尋連結，仍可導航。"""
+    if not address:
+        return ''
+    query = f'{extract_title(content)} {address}'.strip()
+    return GOOGLE_MAPS_SEARCH_URL + quote(query)
+
+
+def import_entries(posts_path, entries, dry_run, enable_geocode, generate_map_search=False):
+    """把 entries 中尚未存在的文章寫進 posts.js；回傳實際寫入篇數（dry-run 為 0）。"""
     posts_source = posts_path.read_text(encoding='utf-8')
     known = existing_shortcodes(posts_source)
     finder = build_coordinate_finder(enable_geocode)
@@ -353,10 +369,13 @@ def run_import(posts_path, inbox_path, dry_run, enable_geocode):
             continue
         known.add(entry['shortcode'])
         coordinates, source = finder(entry['map'], entry['address'])
+        if generate_map_search and not entry['map']:
+            entry = {**entry, 'map': build_map_search_url(entry['content'], entry['address'])}
         status = f'📍 {coordinates[0]:.5f}, {coordinates[1]:.5f}（{source}）' if coordinates else '⚠️ 無座標（不會出現在地圖上）'
-        print(f"✅ {label} {entry['date']}｜{entry['region']}｜{entry['content'].splitlines()[0] if entry['content'] else '(無內文)'}｜{status}")
+        first_line = entry['content'].splitlines()[0] if entry['content'] else '(無內文)'
+        print(f"✅ {label} {entry['date']}｜{entry['region']}｜{first_line}｜{status}")
         if not entry['map']:
-            print('   ↳ 提醒：沒有 map: 連結，詳情頁不會有「Google 導航」按鈕')
+            print('   ↳ 提醒：沒有地圖連結，詳情頁不會有「Google 導航」按鈕')
         blocks.append(format_post_entry(entry, coordinates))
 
     if not blocks:
@@ -369,8 +388,59 @@ def run_import(posts_path, inbox_path, dry_run, enable_geocode):
     newline = detect_newline(posts_path)
     backup_path = backup_file(posts_path)
     write_preserving_newline(posts_path, append_entries(posts_source, blocks), newline)
-    archived = archive_inbox(inbox_path)
-    print(f'\n🎉 已新增 {len(blocks)} 篇到 {posts_path.name}（備份：{backup_path.name}；inbox 已封存到 {archived.name}）')
+    print(f'\n🎉 已新增 {len(blocks)} 篇到 {posts_path.name}（備份：{backup_path.name}）')
+    return len(blocks)
+
+
+def run_import(posts_path, inbox_path, dry_run, enable_geocode):
+    if not inbox_path.exists():
+        inbox_path.write_text(INBOX_TEMPLATE, encoding='utf-8')
+        print(f'已建立 {inbox_path}，請貼上貼文後再執行一次。')
+        return 0
+
+    entries = parse_inbox(inbox_path.read_text(encoding='utf-8'))
+    if not entries:
+        print('inbox.txt 裡沒有可匯入的貼文（第一行需要是 IG 網址）。')
+        return 0
+
+    written = import_entries(posts_path, entries, dry_run, enable_geocode)
+    if written:
+        archived = archive_inbox(inbox_path)
+        print(f'inbox 已封存到 {archived.name}')
+    return 0
+
+
+def entry_from_media(media):
+    """把 IG API 的一筆 media 轉成與 inbox 解析結果相同的 entry 格式。"""
+    content = (media.get('caption') or '').strip()
+    return build_entry(media['permalink'], content, instagram_api.timestamp_to_date(media.get('timestamp')))
+
+
+def refresh_token_if_possible(token, session, env_path):
+    try:
+        new_token, expires_in = instagram_api.refresh_and_store_token(token, session, env_path)
+    except instagram_api.InstagramApiError as error:
+        print(f'ℹ️  token 未延長（{error}），沿用目前的 token')
+        return token
+    if new_token != token:
+        print(f'🔑 token 已延長，約 {expires_in // 86400} 天後到期')
+    return new_token
+
+
+def run_from_instagram(posts_path, dry_run, enable_geocode, limit, env_path=instagram_api.DEFAULT_ENV_PATH):
+    session = requests.Session()
+    try:
+        token = instagram_api.load_access_token(env_path)
+        token = refresh_token_if_possible(token, session, env_path)
+        media_list = instagram_api.fetch_all_media(token, session, limit)
+    except instagram_api.InstagramApiError as error:
+        print(f'❌ {error}')
+        return 1
+
+    print(f'從 Instagram 取得 {len(media_list)} 篇貼文')
+    entries = [entry_from_media(media) for media in media_list if media.get('permalink')]
+    entries.sort(key=lambda entry: entry['date'])
+    import_entries(posts_path, entries, dry_run, enable_geocode, generate_map_search=True)
     return 0
 
 
@@ -397,12 +467,16 @@ def main(argv=None):
     parser.add_argument('--dry-run', action='store_true', help='只預覽，不寫入檔案')
     parser.add_argument('--backfill', action='store_true', help='幫既有文章補上 lat/lng')
     parser.add_argument('--no-geocode', action='store_true', help='不連網查詢座標')
+    parser.add_argument('--from-instagram', action='store_true', help='從 IG 官方 API 抓取自己帳號的所有貼文')
+    parser.add_argument('--limit', type=int, default=None, help='搭配 --from-instagram：最多抓幾篇（新到舊）')
     args = parser.parse_args(argv)
 
     if hasattr(sys.stdout, 'reconfigure'):
         sys.stdout.reconfigure(encoding='utf-8')
     if args.backfill:
         return run_backfill(args.posts, args.dry_run)
+    if args.from_instagram:
+        return run_from_instagram(args.posts, args.dry_run, not args.no_geocode, args.limit)
     return run_import(args.posts, args.inbox, args.dry_run, not args.no_geocode)
 
 

@@ -3,3 +3,4 @@ tools/inbox.txt
 tools/inbox_history/
 __pycache__/
 .pytest_cache/
+tools/.env
