@@ -4,512 +4,105 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>a.lazyflower 一朵懶懶花🌸</title>
-    
-    <!-- Favicon - 使用 emoji 作為圖標 -->
+    <meta name="description" content="一朵懶懶花的台中美食與生活食記地圖：小鳥胃・螞蟻人・挑食鬼的主觀紀錄。">
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌸</text></svg>">
-    
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+    <link rel="stylesheet" href="css/style.css">
+
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+    <script type="module" src="js/app.js"></script>
+
     <!-- GoatCounter 訪客統計 -->
-    <script>
-        // Append to the <body>; can use a CSS selector to append somewhere else.
-        window.goatcounter.visit_count({append: 'body'})
-    </script>
-    <script data-goatcounter="https://lazyflower.goatcounter.com/count"
-            async src="//gc.zgo.at/count.js"></script>
-    
-    
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Noto+Sans+TC:wght@400;700&display=swap" rel="stylesheet">
-    <script async src="//www.instagram.com/embed.js"></script>
-    <style>
-        body { 
-            font-family: 'Noto Sans TC', 'Inter', sans-serif; 
-            background-color: #fcfcfc; 
-            user-select: none;
-            -webkit-user-select: none;
-            -moz-user-select: none;
-            -ms-user-select: none;
-        }
-        * {
-            -webkit-touch-callout: none;
-        }
-        .text-pink{ color: #ffa4d1; }
-        .bg-blue{ background-color: #32a9df; }
-        .bg-blue:hover{ background-color: rgb(27, 128, 175); }
-        .post-card { 
-            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out; 
-            background-color: #fff; 
-            border: 1px solid #f0f0f0;
-            display: flex;
-            flex-direction: row;
-            height: 380px;
-            align-items: stretch;
-        }
-        .post-card:hover { transform: translateY(-5px) rotate(0.5deg); box-shadow: 0 15px 25px -5px rgba(236, 72, 153, 0.2); }
-        .post-card-image { 
-            flex: 0 0 250px; 
-            max-width: 250px; 
-            min-width: 250px;
-            overflow: hidden;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .post-card-content { 
-            flex: 1; 
-            display: flex; 
-            flex-direction: column; 
-            overflow: hidden;
-            min-width: 0;
-        }
-        .post-content-text { 
-            max-height: 120px; 
-            overflow: hidden; 
-            transition: max-height 0.3s ease;
-            position: relative;
-        }
-        .post-content-text.expanded { max-height: 500px; overflow-y: auto; }
-        .expand-btn { cursor: pointer; color: #32a9df; font-size: 0.875rem; margin-top: 0.5rem; }
-        .expand-btn:hover { text-decoration: underline; }
-        #sidebar { 
-            width: 16rem; 
-            flex-shrink: 0;
-            transition: transform 0.3s ease-in-out; 
-            max-height: calc(100vh - 8rem); 
-            overflow-y: auto; 
-        }
-        #sidebar::-webkit-scrollbar { width: 6px; }
-        #sidebar::-webkit-scrollbar-thumb { background-color: #f9a8d4; border-radius: 3px; }
-        .ig-embed-container { 
-            width: 100%; 
-            height: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .ig-embed-container .instagram-media { 
-            width: 100% !important; 
-            max-width: 100% !important; 
-            min-width: 0 !important; 
-            margin: 0 auto !important;
-        }
-        #back-to-top {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            background-color: #32a9df;
-            color: white;
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            display: none;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            box-shadow: 0 4px 12px rgba(50, 169, 223, 0.4);
-            transition: all 0.3s ease;
-            z-index: 1000;
-        }
-        #back-to-top:hover {
-            background-color: rgb(27, 128, 175);
-            transform: translateY(-5px);
-        }
-        #back-to-top.show { display: flex; }
-        .close-modal {
-            color: #aaa;
-            float: right;
-            font-size: 28px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-        .close-modal:hover { color: #000; }
-        .max-w-7xl.mx-auto.flex {
-            align-items: flex-start;
-        }
-        main.flex-1 {
-            min-width: 0;
-            overflow-x: hidden;
-        }
-        @media (max-width: 768px) {
-            .post-card {
-                height: 280px;
-            }
-            .post-card-image { 
-                flex: 0 0 200px; 
-                max-width: 200px; 
-                min-width: 200px;
-            }
-            .post-content-text { 
-                max-height: 80px;
-            }
-            header .max-w-7xl { padding: 0.75rem 1rem !important; }
-            header h1 { font-size: 1rem !important; line-height: 1.4 !important; }
-            .lg\:hidden.border-t { padding: 0.5rem 1rem !important; }
-        }
-        @media (max-width: 480px) {
-            .post-card {
-                height: 220px;
-            }
-            .post-card-image { 
-                flex: 0 0 150px; 
-                max-width: 150px; 
-                min-width: 150px;
-            }
-            .post-content-text { 
-                max-height: 60px;
-                font-size: 0.75rem;
-            }
-            .post-card-content .px-4 {
-                padding-left: 0.75rem;
-                padding-right: 0.75rem;
-            }
-            .post-card-content .p-4 {
-                padding: 0.75rem;
-            }
-        }
-    </style>
+    <script data-goatcounter="https://lazyflower.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 </head>
-<body class="text-slate-800">
+<body data-view="list">
 
-<header class="sticky top-0 bg-white shadow-xl z-20">
-    <div class="max-w-7xl mx-auto p-4 flex flex-col sm:flex-row justify-between items-center space-y-4 sm:space-y-0">
-        <div class="flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto">
-            <h1 class="text-lg sm:text-xl font-extrabold text-pink text-center sm:text-left">
-                a.lazyflower<br class="sm:hidden">一朵懶懶花🌸<br class="hidden sm:inline"> 台中｜美食｜生活
-            </h1>
-        </div>
-        <div class="w-full sm:w-96 relative">
-            <input type="text" id="search-input" placeholder="🔍 搜尋區域、店名或關鍵字..." 
-                class="w-full py-2.5 pl-5 pr-10 border-2 border-blue-300 rounded-full shadow-md focus:outline-none focus:ring-4 focus:ring-blue-100 transition duration-200"
-                oninput="filterPosts(this.value)">
+<div id="sticky-bar" class="sticky-bar">
+    <header class="site-header">
+        <a class="brand" href="./" aria-label="回到首頁">
+            <span class="brand-mark" aria-hidden="true">🌸</span>
+            <span class="brand-text">
+                <strong>一朵懶懶花</strong>
+                <small>a.lazyflower・台中｜美食｜生活</small>
+            </span>
+        </a>
+
+        <label class="search" for="search-input">
+            <svg class="search-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+            <input type="search" id="search-input" placeholder="搜尋店名、區域、品項…例如「清水 牛肉麵」" autocomplete="off">
+            <button type="button" id="search-clear" class="search-clear" aria-label="清除搜尋" hidden>✕</button>
+        </label>
+
+        <nav class="header-links" aria-label="社群連結">
+            <a class="btn btn-ig" href="https://www.instagram.com/a.lazyflower/" target="_blank" rel="noopener">Instagram</a>
+            <a class="btn btn-ghost" href="https://www.threads.com/@a.lazyflower" target="_blank" rel="noopener">Threads</a>
+        </nav>
+    </header>
+
+    <div class="toolbar">
+        <div id="region-chips" class="chips" role="tablist" aria-label="地區篩選"></div>
+        <div class="toolbar-right">
+            <span id="result-count" class="result-count" aria-live="polite"></span>
+            <select id="sort-select" class="select" aria-label="排序">
+                <option value="newest">最新優先</option>
+                <option value="oldest">最舊優先</option>
+            </select>
         </div>
     </div>
+</div>
 
-    <!-- 手機版分類導覽 -->
-    <div class="lg:hidden border-t border-slate-200 bg-white">
-        <div class="max-w-7xl mx-auto px-4 py-3">
-            <h3 class="text-sm font-bold mb-2 text-blue-500">分類導覽</h3>
-            <div class="overflow-x-auto">
-                <ul id="mobile-nav-list" class="flex space-x-3 pb-2"></ul>
-            </div>
-        </div>
+<section class="hero" aria-label="關於我">
+    <div class="hero-intro">
+        <p class="hero-hello">👋 嗨！我是一朵懶懶花</p>
+        <p class="hero-bio">喜愛發掘生活中的美好🙋‍♀️ 小鳥胃・螞蟻人・挑食鬼👻 食記主觀紀錄😉<br>
+            <span class="muted">📮 互惠／合作邀約歡迎私訊・⚠️ 未經同意勿轉載圖文</span></p>
     </div>
-</header>
+    <dl class="hero-stats">
+        <div><dt>篇食記</dt><dd id="stat-posts">0</dd></div>
+        <div><dt>個地區</dt><dd id="stat-regions">0</dd></div>
+        <div><dt>次瀏覽</dt><dd id="stat-visits">…</dd></div>
+    </dl>
+</section>
 
-<div class="max-w-7xl mx-auto flex">
-    <nav id="sidebar" class="hidden lg:block sticky top-32 pb-8 pr-6 border-r border-slate-100">
-        <!-- 側邊欄資訊區 -->
-        <div class="p-4 bg-gradient-to-br from-pink-50 to-blue-50 rounded-xl">
-            <h4 class="font-bold text-slate-700 mb-3">👋 關於我</h4>
-            <p class="text-sm text-slate-600 mb-3">喜愛發掘生活中的美好🙋‍♀️<br>
-                小鳥胃●螞蟻人●挑食鬼👻<br> 食記主觀紀錄😉<br>
-                📮互惠/合作邀約歡迎私訊<br>
-                ⚠️未經同意勿轉載圖文
-            </p>
-            <a href="https://www.instagram.com/a.lazyflower" target="_blank" class="block w-full text-center py-2 bg-gradient-to-r from-purple-500 to-pink-500 text-white text-sm rounded-lg hover:opacity-90 transition mb-2">
-                IG: @a.lazyflower
-            </a>
-            <div class="text-center text-xs text-slate-400 mt-3 pt-3 border-t border-slate-200">
-                網站瀏覽次數: <span id="visit-count" class="font-bold text-blue-600">載入中...</span>
-            </div>
+<main class="layout">
+    <section class="list-pane" aria-label="食記列表">
+        <div id="post-grid" class="post-grid"></div>
+        <div id="empty-state" class="empty-state" hidden>
+            <p class="empty-emoji">🥲</p>
+            <p class="empty-title">找不到「<span id="empty-query"></span>」相關的食記</p>
+            <p class="muted">換個關鍵字試試，或看看其他地區</p>
+            <button type="button" id="reset-filters" class="btn btn-primary">清除篩選</button>
         </div>
+    </section>
 
-        <h3 class="text-lg font-bold mb-4 text-blue-500 border-b pb-2 border-blue-100">分類導覽</h3>
-        <ul id="city-nav-list" class="space-y-2"></ul>
-        
-    </nav>
+    <aside class="map-pane" aria-label="食記地圖">
+        <div id="map" class="map"></div>
+    </aside>
+</main>
 
-    <main class="flex-1 p-4 sm:p-6 lg:p-10">
-        <!-- 自我介紹區塊（手機版） -->
-        <div class="lg:hidden mb-8 p-6 bg-gradient-to-br from-pink-50 to-blue-50 rounded-xl shadow-md">
-            <h2 class="text-xl font-bold text-pink mb-3">👋 關於我</h2>
-            <p class="text-slate-700 mb-3">喜愛發掘生活中的美好🙋‍♀️<br>
-                小鳥胃●螞蟻人●挑食鬼👻<br> 食記主觀紀錄😉<br>
-                📮互惠/合作邀約歡迎私訊<br>
-                ⚠️未經同意勿轉載圖文
-            </p>
-            <div class="flex gap-2 mb-3">
-                <a href="https://www.instagram.com/a.lazyflower" target="_blank" class="flex-1 text-center py-2 bg-gradient-to-r from-purple-500 to-pink-500 text-white text-sm rounded-lg hover:opacity-90 transition">
-                    IG: @a.lazyflower
-                </a>
-            </div>
-            <div class="text-center text-sm text-slate-500 pt-3 border-t border-slate-200">
-                網站瀏覽次數: <span id="visit-count-mobile" class="font-bold text-blue-600">載入中...</span>
-            </div>
-        </div>
+<button type="button" id="view-toggle" class="view-toggle" aria-pressed="false">
+    <span class="view-toggle-icon" aria-hidden="true">🗺️</span><span class="view-toggle-label">地圖</span>
+</button>
 
-        <div id="posts-container" class="space-y-8"></div>
-        <div id="no-results" class="text-center py-20 hidden bg-slate-50 rounded-xl mt-10">
-            <p class="text-2xl font-semibold text-slate-500 mb-2">😅 找不到結果</p>
-            <p class="text-lg text-slate-400">抱歉！找不到符合 <span id="search-query-display" class="font-bold text-pink"></span> 的食記。</p>
-            <p class="mt-4 text-slate-400">請嘗試更寬泛的關鍵字或檢查拼寫。</p>
-        </div>
-    </main>
+<button type="button" id="back-to-top" class="back-to-top" aria-label="回到頂部">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+</button>
+
+<div id="detail-drawer" class="drawer" aria-hidden="true">
+    <div class="drawer-backdrop"></div>
+    <div class="drawer-panel" role="dialog" aria-modal="true" aria-labelledby="drawer-title">
+        <button type="button" class="drawer-close" aria-label="關閉">✕</button>
+        <div class="drawer-body"></div>
+    </div>
 </div>
 
-<!-- 返回頂部按鈕 -->
-<div id="back-to-top" onclick="scrollToTop()">
-    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18" />
-    </svg>
-</div>
-
-<footer class="bg-slate-100 mt-12 py-8 text-center text-sm text-slate-500">
+<footer class="site-footer">
     <p>Copyright © 2025 a.lazyflower 一朵懶懶花🌸. All rights reserved.</p>
 </footer>
-
-<script type="module">
-    import { IG_POSTS } from './posts.js';
-
-    const POSTS_PER_LOAD = 6;
-    const REGIONS = [
-        '台北 Taipei','新北 New Taipei','桃園 Taoyuan','苗栗 Miaoli','台中 Taichung','彰化 Changhua',
-        '南投 Nantou','雲林 Yunlin','嘉義 Chiayi','台南 Tainan','高雄 Kaohsiung','屏東 Pingtung',
-        '宜蘭 Yilan','花蓮 Hualien','台東 Taitung','日本 Japan','開箱 Unboxing','旅遊 Travel'
-    ];
-
-    const postsContainer = document.getElementById('posts-container');
-    const noResults = document.getElementById('no-results');
-    const searchQueryDisplay = document.getElementById('search-query-display');
-    const cityNavList = document.getElementById('city-nav-list');
-    const mobileNavList = document.getElementById('mobile-nav-list');
-    let currentPostCounts = {};
-    let visiblePostsByRegion = {};
-
-    function formatDate(dateStr){
-        const date = new Date(dateStr);
-        return `${date.getFullYear()}年${String(date.getMonth()+1).padStart(2,'0')}月${String(date.getDate()).padStart(2,'0')}日`;
-    }
-
-    function createPostCard(post, index){
-        let cleanPermalink = post.permalink.split('?')[0].split('#')[0];
-        if(!cleanPermalink.endsWith('/')) cleanPermalink += '/';
-        const postId = `post-${Date.now()}-${index}`;
-        return `
-        <div class="post-card rounded-xl shadow-md bg-white overflow-hidden">
-            <div class="post-card-image ig-embed-container">
-                <blockquote class="instagram-media" data-instgrm-permalink="${cleanPermalink}" data-instgrm-version="14"></blockquote>
-            </div>
-            <div class="post-card-content">
-                <div class="px-4 pt-3 pb-2">
-                    <a href="${cleanPermalink}" target="_blank" class="inline-flex items-center gap-2 text-xs text-slate-500 hover:text-blue-600 transition duration-150">
-                        📸 在 Instagram 查看這則貼文
-                    </a>
-                </div>
-                <div class="p-4 flex-1 overflow-hidden">
-                    <div id="${postId}" class="post-content-text">
-                        <p class="text-slate-700 text-sm leading-relaxed whitespace-pre-line">${post.content}</p>
-                    </div>
-                    <div class="expand-btn" onclick="toggleExpand('${postId}')">
-                        <span id="${postId}-btn">📖 展開全文</span>
-                    </div>
-                    ${post.map ? `<div class="mt-3"><a href="${post.map}" target="_blank" class="inline-flex items-center gap-2 text-sm font-medium text-blue-600 hover:text-blue-700">📍 開啟地圖</a></div>` : ''}
-                    <div class="flex justify-between items-center mt-3 pt-3 border-t border-slate-100">
-                        <span class="text-xs text-slate-500">📅 ${formatDate(post.date)}</span>
-                        <span class="inline-block text-xs font-semibold text-white bg-blue-600 px-3 py-1 rounded-full">${post.region}</span>
-                    </div>
-                </div>
-            </div>
-        </div>`;
-    }
-
-    function parseDate(dateStr) {
-        // 將 'YYYY-MM-DD' 解析成 Date 物件
-        const [year, month, day] = dateStr.split('-').map(Number);
-        return new Date(year, month-1, day);
-    }
-
-    function renderPosts(regionsToRender, isSearch=false, filteredPosts=[]) {
-        postsContainer.innerHTML = '';
-        currentPostCounts = {};
-        if(regionsToRender.length===0 && document.getElementById('search-input').value.trim()!==''){
-            noResults.classList.remove('hidden'); 
-            return;
-        } else noResults.classList.add('hidden');
-
-        const sortedPosts = [...IG_POSTS].sort((a,b) => parseDate(b.date) - parseDate(a.date));
-        const groupedPosts = sortedPosts.reduce((acc, post)=>{
-            if(!acc[post.region]) acc[post.region]=[];
-            acc[post.region].push(post);
-            return acc;
-        }, {});
-
-        regionsToRender.forEach(city=>{
-            // 搜尋時使用 filteredPosts，否則使用 groupedPosts
-            const cityPosts = isSearch 
-                ? filteredPosts.filter(p => p.region === city) 
-                : groupedPosts[city] || [];
-
-            visiblePostsByRegion[city] = cityPosts; // <-- 儲存這個區域文章
-
-            const safeCityId = city.replace(/\s+/g,'-');
-            const initialCount = isSearch ? cityPosts.length : Math.min(cityPosts.length, POSTS_PER_LOAD);
-            const hasMore = cityPosts.length > initialCount;
-
-            const citySection = document.createElement('section');
-            citySection.id = safeCityId;
-            citySection.className = 'city-section pt-10 pb-4';
-            citySection.innerHTML = `
-                <div class="mb-8">
-                    <h3 class="text-2xl sm:text-3xl font-extrabold text-pink border-b-2 border-pink pb-3 mb-2">
-                        📌 ${city}
-                    </h3>
-                    <p class="text-sm sm:text-base text-slate-500 pl-1">
-                        ${cityPosts.length>0 ? `共 ${cityPosts.length} 篇文章`:'尚無貼文'}
-                    </p>
-                </div>
-                <div id="grid-${safeCityId}" class="flex flex-col gap-6"></div>
-                <div class="text-center mt-8">
-                    ${cityPosts.length>0 && !isSearch ? `<button id="load-more-${safeCityId}" onclick="loadMore('${city}')" class="font-bold py-3 px-8 rounded-full shadow-lg transition duration-300 bg-blue hover:bg-blue text-white">${hasMore?`載入更多 (目前已顯示 ${initialCount}/${cityPosts.length} 篇)`:`已顯示全部 ${cityPosts.length} 篇`}</button>` : ''}
-                </div>
-            `;
-            postsContainer.appendChild(citySection);
-            const gridContainer = citySection.querySelector('.flex');
-            for(let i=0; i<initialCount; i++) gridContainer.insertAdjacentHTML('beforeend', createPostCard(cityPosts[i], i));
-            currentPostCounts[city] = initialCount;
-        });
-
-        if(window.instgrm) window.instgrm.Embeds.process();
-    }
-
-    window.filterPosts = function(query){
-        const q = query.trim().toLowerCase();
-        searchQueryDisplay.textContent = q;
-        if(!q) return renderPosts(REGIONS);
-
-        const filteredPosts = IG_POSTS.filter(p=>p.region.toLowerCase().includes(q) || p.content.toLowerCase().includes(q));
-        const regionsToRender = [...new Set(filteredPosts.map(p=>p.region))];
-        renderPosts(regionsToRender, true, filteredPosts); // 傳入 filteredPosts
-    }
-
-    window.loadMore = function(city){
-        const cityPosts = visiblePostsByRegion[city] || [];
-        const currentCount = currentPostCounts[city]||0;
-        const gridContainer = document.getElementById(`grid-${city.replace(/\s/g,'-')}`);
-        const loadMoreButton = document.getElementById(`load-more-${city.replace(/\s/g,'-')}`);
-        if(!gridContainer||!loadMoreButton) return;
-
-        const nextCount = Math.min(currentCount+POSTS_PER_LOAD, cityPosts.length);
-        for(let i=currentCount; i<nextCount; i++){
-            gridContainer.insertAdjacentHTML('beforeend', createPostCard(cityPosts[i], i));
-        }
-        currentPostCounts[city] = nextCount;
-
-        if(nextCount >= cityPosts.length){
-            loadMoreButton.textContent=`已顯示全部 ${cityPosts.length} 篇貼文`;
-            loadMoreButton.disabled = true;
-            loadMoreButton.classList.add('bg-gray-300','cursor-not-allowed');
-            loadMoreButton.classList.remove('bg-blue','hover:bg-blue');
-        } else {
-            loadMoreButton.textContent=`載入更多 (目前已顯示 ${nextCount}/${cityPosts.length} 篇)`;
-        }
-
-        if(window.instgrm) window.instgrm.Embeds.process();
-    }
-
-    function renderNavLists() {
-        cityNavList.innerHTML = '';
-        mobileNavList.innerHTML = '';
-        REGIONS.forEach(region => {
-            const liDesktop = document.createElement('li');
-            liDesktop.innerHTML = `<a href="#${region.replace(/\s+/g,'-')}" class="block px-3 py-1 rounded hover:bg-blue-50 text-blue-600">
-                ${region} (${IG_POSTS.filter(p => p.region === region).length})
-            </a>`;
-            cityNavList.appendChild(liDesktop);
-
-            const liMobile = document.createElement('li');
-            liMobile.innerHTML = `<a href="#${region.replace(/\s+/g,'-')}" class="px-3 py-1 rounded bg-blue-50 text-blue-600 whitespace-nowrap hover:bg-blue-100">${region}</a>`;
-            mobileNavList.appendChild(liMobile);
-        });
-    }
-
-    // 展開/收合功能
-    window.toggleExpand = function(postId) {
-        const element = document.getElementById(postId);
-        const btn = document.getElementById(postId + '-btn');
-        if (element.classList.contains('expanded')) {
-            element.classList.remove('expanded');
-            btn.textContent = '📖 展開全文';
-        } else {
-            element.classList.add('expanded');
-            btn.textContent = '📖 收合';
-        }
-    }
-
-    // 返回頂部按鈕
-    window.scrollToTop = function() {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-
-    // 監聽滾動顯示返回頂部按鈕
-    window.addEventListener('scroll', function() {
-        const backToTop = document.getElementById('back-to-top');
-        if (window.pageYOffset > 300) {
-            backToTop.classList.add('show');
-        } else {
-            backToTop.classList.remove('show');
-        }
-    });
-
-    // GoatCounter 瀏覽次數功能 - 使用 JSON API 顯示純數字
-    function updateVisitCount() {
-        const visitCountEl = document.getElementById('visit-count');
-        const mobileCountEl = document.getElementById('visit-count-mobile');
-        
-        // 使用 XMLHttpRequest 獲取 JSON 數據
-        const xhr = new XMLHttpRequest();
-        
-        xhr.addEventListener('load', function() {
-            if (xhr.status === 200) {
-                try {
-                    const data = JSON.parse(xhr.responseText);
-                    const count = data.count || '0';
-                    
-                    // 顯示純數字
-                    if (visitCountEl) visitCountEl.textContent = count;
-                    if (mobileCountEl) mobileCountEl.textContent = count;
-                } catch (e) {
-                    console.error('解析 JSON 失敗:', e);
-                    if (visitCountEl) visitCountEl.textContent = '載入失敗';
-                    if (mobileCountEl) mobileCountEl.textContent = '載入失敗';
-                }
-            } else {
-                // 如果返回 404 或其他錯誤
-                console.log('GoatCounter API 返回錯誤:', xhr.status);
-                if (visitCountEl) visitCountEl.textContent = '暫無數據';
-                if (mobileCountEl) mobileCountEl.textContent = '暫無數據';
-            }
-        });
-        
-        xhr.addEventListener('error', function() {
-            console.error('無法連接到 GoatCounter');
-            if (visitCountEl) visitCountEl.textContent = '連線失敗';
-            if (mobileCountEl) mobileCountEl.textContent = '連線失敗';
-        });
-        
-        // 使用 TOTAL 路徑獲取網站總瀏覽次數
-        xhr.open('GET', 'https://lazyflower.goatcounter.com/counter/TOTAL.json');
-        xhr.send();
-    }
-
-    // 禁止右鍵選單
-    document.addEventListener('contextmenu', function(e) {
-        e.preventDefault();
-    });
-
-    // 禁止特定快捷鍵
-    document.addEventListener('keydown', function(e) {
-        if ((e.ctrlKey && (e.key === 'c' || e.key === 'a' || e.key === 'u')) || 
-            (e.ctrlKey && e.shiftKey && e.key === 'i')) {
-            e.preventDefault();
-        }
-    });
-
-    document.addEventListener('DOMContentLoaded',()=>{
-        renderNavLists();
-        renderPosts(REGIONS);
-        updateVisitCount();
-    });
-</script>
 
 </body>
 </html>

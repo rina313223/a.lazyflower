@@ -4,6 +4,8 @@ export const IG_POSTS = [
         permalink: 'https://www.instagram.com/p/DO8d-m_k0Fd/',
         date: '2025-10-02',
         map: 'https://maps.app.goo.gl/FKp9MWQK18ka1rGJ6',
+        lat: 24.267225,
+        lng: 120.561353,
         content: `✨️#浯江御麵館
 
 🍽紅燒牛肉麵／$150
@@ -34,6 +36,8 @@ export const IG_POSTS = [
         permalink: 'https://www.instagram.com/p/DPghG9kkxQ0/',
         date: '2025-10-07',
         map: 'https://maps.app.goo.gl/gfWzcgCrnF5EYdY86',
+        lat: 24.108255,
+        lng: 120.498136,
         content: `✨️#和美淺草豆花
 
 🍽綜合豆花／$20
@@ -62,6 +66,8 @@ export const IG_POSTS = [
         permalink: 'https://www.instagram.com/p/DPlqp61E6nr/',
         date: '2025-10-09',
         map: 'https://maps.app.goo.gl/jE3sz3txJ5v2myRUA',
+        lat: 24.240955,
+        lng: 120.629269,
         content: `✨️#九九冰菓室
 
 🍽巧克力牛奶雪棉冰／$50
@@ -92,6 +98,8 @@ export const IG_POSTS = [
         permalink: 'https://www.instagram.com/p/DPyiqBKEwN_/',
         date: '2025-10-14',
         map: 'https://maps.app.goo.gl/jQV4mtzBs81AEYi66',
+        lat: 24.269657,
+        lng: 120.575240,
         content: `✨️#山腳下牛罵社通事屋
 
 🍽大肚山地質蛋糕
@@ -121,6 +129,8 @@ export const IG_POSTS = [
         permalink: 'https://www.instagram.com/p/DP3sQnGk9nj/',
         date: '2025-10-16',
         map: 'https://maps.app.goo.gl/E33NYDcaNkCwu9v8A',
+        lat: 24.250028,
+        lng: 120.830513,
         content: `✨️#松之富複合式食堂
 
 🍽培根蛋炒飯／$80
@@ -149,6 +159,8 @@ export const IG_POSTS = [
             permalink: 'https://www.instagram.com/p/DQEkQ0Uk2e_/',
             date: '2025-10-21',
             map: 'https://maps.app.goo.gl/NKsQwq9XZjt8GxM76',
+            lat: 25.045173,
+            lng: 121.507818,
             content: `✨️#三兄妹雪花冰
 
 🍽大三圓雪花冰／$160
@@ -177,6 +189,8 @@ FAN-CON上4人簡直不要太寵粉
             permalink: 'https://www.instagram.com/p/DQJt2aEk67w/',
             date: '2025-10-23',
             map: 'https://maps.app.goo.gl/MLgTRz9xNYvY4F1n9',
+            lat: 25.044943,
+            lng: 121.507537,
             content: `✨️#小辣椒魷魚羹
 
 🍽甜不辣／$70
@@ -205,6 +219,8 @@ FAN-CON上4人簡直不要太寵粉
             permalink: 'https://www.instagram.com/p/DQWlxLyk7BH/',
             date: '2025-10-28',
             map: 'https://maps.app.goo.gl/TyscnQZv6d6QyvVw5',
+            lat: 24.899778,
+            lng: 121.146616,
             content: `✨️#即食熟香腸
 
 🍽即食熟香腸／$45
@@ -224,6 +240,8 @@ FAN-CON上4人簡直不要太寵粉
             permalink: 'https://www.instagram.com/p/DQbvaGEEz-v/',
             date: '2025-10-30',
             map: 'https://maps.app.goo.gl/mmGhpXQmrgZ9UaKB6',
+            lat: 24.135764,
+            lng: 120.692553,
             content: `✨️#雞湯桑 #Torisan
 
 🍽東京雞白湯／$248
@@ -248,6 +266,8 @@ FAN-CON上4人簡直不要太寵粉
             permalink: 'https://www.instagram.com/p/DQonVg3k4wg/',
             date: '2025-11-04',
             map: 'https://maps.app.goo.gl/z9BP9gy67npma7kq9',
+            lat: 24.135762,
+            lng: 120.692551,
             content: `✨️#京都勝牛
 
 🍽名物板腱牛軟殼蝦／$ 460
@@ -283,6 +303,8 @@ FAN-CON上4人簡直不要太寵粉
             permalink: 'https://www.instagram.com/p/DRKFoycjwre/',
             date: '2025-11-17',
             map: 'https://maps.app.goo.gl/qch3rLjU1Puu78tB8',
+            lat: 24.163700,
+            lng: 120.644617,
             content: `✨️#屋莎 #woosa洋食パンケーキ
 
 🍽經典蘿蔔泥漢堡排／$360
@@ -322,6 +344,8 @@ https://ocard.co/s/gate/m63jqx/PD9w5y
             permalink: 'https://www.instagram.com/p/DRR0BYYEw5G/?img_index=1',
             date: '2025-11-20',
             map: 'https://maps.app.goo.gl/YG9Hv9zU5dayViST6',
+            lat: 24.271423,
+            lng: 120.568271,
             content: `✨️#孫東寶 #新開幕
 
 🍽板腱牛排／$310
@@ -350,6 +374,8 @@ https://ocard.co/s/gate/m63jqx/PD9w5y
             permalink: 'https://www.instagram.com/p/DJWLcqkTgPY/',
             date: '2025-05-07',
             map: 'https://maps.app.goo.gl/PY5c2nqdskg8UVfz9',
+            lat: 24.269216,
+            lng: 120.578484,
             content: `✨️#正牌米糕莊
 
 🍽米糕／$40
@@ -377,6 +403,8 @@ https://ocard.co/s/gate/m63jqx/PD9w5y
             permalink: 'https://www.instagram.com/p/DI-5Yj7T21O/',
             date: '2025-04-28',
             map: 'https://maps.app.goo.gl/Zpm2D3LGEAwTo2ZN8',
+            lat: 24.164198,
+            lng: 120.686808,
             content: `✨️#森沐森仙草
 
 🍽綜合仙草冰／$80
@@ -409,6 +437,8 @@ https://ocard.co/s/gate/m63jqx/PD9w5y
             permalink: 'https://www.instagram.com/reel/DII3CyjzZ4z/',
             date: '2025-04-07',
             map: 'https://maps.app.goo.gl/UDHjrJ6oj2YNxDrLA',
+            lat: 24.165658,
+            lng: 120.636611,
             content: `✨️#IKIGAI燒肉專門店
 
 🍽美國CH翼板／$440
